@@ -1,0 +1,74 @@
+###################################################################
+# ASSIGN PARAMETERS DESCRIBING THE DATA MODEL OF THE INPUT FILES
+###################################################################
+
+# list of the input files
+
+inputfiles <- sub('\\.csv$', '', list.files(dirinput))
+
+
+# assign -TheShinISS_CDM_tables-: it is a 2-level list describing the ARS tables, and will enter the function as the first parameter. the first level is the data domain (in the example: 'Diagnosis' and 'Medicines') and the second level is the list of tables that has a column pertaining to that data domain 
+
+TheShinISS_CDM_tables <- vector(mode="list")
+
+TheShinISS_CDM_tables[["Diagnosis"]] = c("sdo","ps", "exe")
+TheShinISS_CDM_tables[["Medicines"]] = inputfiles[str_detect(inputfiles, "^fed")]
+TheShinISS_CDM_tables[["Medicines"]] = c(TheShinISS_CDM_tables[["Medicines"]], inputfiles[str_detect(inputfiles, "^spf")])
+TheShinISS_CDM_tables[["Procedures"]]= c("sdoproc")
+
+# assign -TheShinISS_CDM_codvar- and -TheShinISS_CDM_coding_system_cols-: they are also 2-level lists, they encode from the data model the name of the column(s) of each table that contain, respectively the code and the coding system, corresponding to a data domain the table belongs to
+
+alldomain <- unique(names(TheShinISS_CDM_tables))
+
+TheShinISS_CDM_codvar <- vector(mode="list")
+
+for (dom in alldomain) {
+  for (ds in TheShinISS_CDM_tables[[dom]]) {
+    if (dom == "Medicines") TheShinISS_CDM_codvar[[dom]][[ds]] = "atc"
+  }
+}
+
+TheShinISS_CDM_codvar[["Diagnosis"]][["sdo"]] = c("dia")
+
+TheShinISS_CDM_codvar[["Diagnosis"]][["ps"]] = c("dia")
+TheShinISS_CDM_codvar[["Diagnosis"]][["exe"]] = c("dia")
+TheShinISS_CDM_codvar[["Procedures"]][["sdoproc"]] = c("int")
+# TheShinISS_CDM_codvar[["Procedures"]][["SDOTEMP"]] = c("CODCHI2","CODCHI3","CODCHI4", "CODCHI5","CODCHI6" ,"CODCHI")
+
+# assign 2 more 3-level lists: -id- -date-. They encode from the data model the name of the column(s) of each data table that contain, respectively, the personal identifier and the date. Those 2 lists are to be inputted in the rename_col option of the function. 
+#NB: GENERAL  contains the names columns will have in the final datasets
+
+ID <- vector(mode="list")
+DATE <- vector(mode="list")
+
+for (dom in alldomain) {
+  for (ds in TheShinISS_CDM_tables[[dom]]) {
+    ID[[dom]][[ds]] = "id"
+  }
+}
+
+
+for (dom in alldomain) {
+  for (ds in TheShinISS_CDM_tables[[dom]]) {
+    if (dom == "Medicines") DATE[[dom]][[ds]] = "datasped"
+  }
+}
+
+DATE[["Diagnosis"]][["sdo"]] = "data_a"
+DATE[["Diagnosis"]][["ps"]] = DATE[["Diagnosis"]][["sdo"]]
+DATE[["Diagnosis"]][["exe"]] ="datai"
+DATE[["Procedures"]][["sdoproc"]] = "data_int"
+
+
+TheShinISS_CDM_datevar<-vector(mode = "list")
+
+TheShinISS_CDM_datevar[["Diagnosis"]][["sdo"]] <- c("data_a")
+TheShinISS_CDM_datevar[["Diagnosis"]][["ps"]] <- "data_a"
+TheShinISS_CDM_datevar[["Diagnosis"]][["exe"]] <- "datai"
+TheShinISS_CDM_datevar[["Procedures"]][["sdoproc"]] <- c("data_int")
+
+for (ds in TheShinISS_CDM_tables[["Medicines"]]) {
+  TheShinISS_CDM_datevar[["Medicines"]][[ds]] <- c("datasped")
+  
+}
+
