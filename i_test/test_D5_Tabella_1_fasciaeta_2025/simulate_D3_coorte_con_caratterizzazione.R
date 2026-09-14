@@ -20,7 +20,7 @@ library(truncnorm)
 # name of the dataset to be generated
 namedataset <- "D3_coorte_con_caratterizzazione"
 
-vocabulary_ATC <-  c("A10BK", "A10BJ", "A10BX16", "A10BH", "A10BD24", "A10BD21", "A10BD19","A10BD13", "A10BD11", "A10BD10", "A10BD07", "A10BD08","A10BD09","A10AE56", "A10AE54", "A10BD16", "A10BD15", "A10BD20", "A10BD23")
+vocabulary_ATC <- c("A10BK", "A10BJ", "A10BX16", "A10BH", "A10BD24", "A10BD21", "A10BD19","A10BD13", "A10BD11", "A10BD10", "A10BD07", "A10BD08","A10BD09","A10AE56", "A10AE54", "A10BD16", "A10BD15", "A10BD20", "A10BD23")
 
 # set number of persons
 Npersons <- 5000
@@ -31,46 +31,26 @@ data[, person_id := paste0("000000",as.character(seq_len(.N)))]
 data[, person_id := paste0("P",substr(person_id, nchar(person_id) - 6, 
                                       nchar(person_id)))]
 
-# date first
-start_date <- as.Date("2016-01-01")
-end_date   <- as.Date("2025-12-31")
-
-data[, date_first := sample(seq(start_date, end_date, by = "day"),
-                            .N, replace = TRUE)]
-
-# period first
-data[, period_first:=ifelse((year(date_first) >= 2016 & year(date_first) <= 2019),
-                            "2016-2019",
-                      ifelse((year(date_first) >= 2020 & year(date_first) <= 2022),
-                             "2020-2022",
-                      ifelse((year(date_first) >= 2023 & year(date_first) <= 2025),
-                             "2023-2025", NA)))]
-# drug
-data[, drug:=sample(c("abira", "apalu", "enzalu", "darolu"), Npersons, 
-                      replace = TRUE, prob = c(rep(0.25, 4)))]
-
-# user type
-data[, user_type:=sample(c("first", "nofirst", "prev"), Npersons, replace = TRUE, 
-                   prob = c(rep(0.33, 3)))]
-
 # ASL
-data[, ASL:=sample(c("CE", "NO", "SE"), Npersons, replace = TRUE, 
+data[, asl:=sample(c("CE", "NO", "SE"), Npersons, replace = TRUE, 
                    prob = c(rep(0.33, 3)))]
 
-# gender
+# genere
 set.seed(1234)
 data[, genere := as.character(sample(1:2, Npersons, replace = TRUE, 
                                      prob = c(.5,.5)))]
 data[, genere := ifelse(genere == "1","M","F")]
+
 # eta
-data[, age := round(rtruncnorm(Npersons, a = 18, b = Inf, mean = 50, sd = 15),0)]
+data[, fasciaeta := as.character(sample(c("40-64", "65-84", "85+"), Npersons, replace = TRUE))]
+
+# atc_5_almeno_3
+data[, atc_5_almeno_3:=sapply(sample(3:10, .N, replace=T), function(n) paste(sample(vocabulary_ATC, n, replace = T), collapse = "_") )]
 
 # covariates at t0: binary
-covariates_binary <- c("iperten", "cardioisc", "infart", "arit", "ictus", "tia",
-                        "scompcard", "dislip", "diab", "renal", "cortic", 
-                        "antiang", "antitromb", "ipolip", "antidiab", "bifosf",
-                        "switch_apalu", "switch_enzalu", "switch_darolu", 
-                       "switch_other_oncol")
+covariates_binary <- c("iperpoliterapia", "rsa_adi", "cardiocircolatoria",
+                       "reumatologica", "gastroenterologica", 
+                       "esenzione_qualsiasi")
 
 for (i in covariates_binary) {
 
@@ -81,9 +61,6 @@ for (i in covariates_binary) {
   data[, cov := sample(cov, Npersons, replace = TRUE, prob = probcov)]
   setnames(data,"cov",i)
 }
-
-# continuous variable
-data[, conc_treat:=round(rtruncnorm(Npersons, a = 0, b = Inf, mean = 4, sd = 3),0)]
 
 
 saveRDS(data, file = paste0(thisdir, "/", namedataset, ".rds"))
