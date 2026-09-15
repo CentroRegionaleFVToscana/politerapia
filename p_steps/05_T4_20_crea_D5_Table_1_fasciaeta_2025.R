@@ -40,21 +40,18 @@ for (j in fasce_eta) {
   
 
   # create D5 with binary covariates
-#   covariates_binary <- c("iperten", "cardioisc", "infart", "arit", "ictus", "tia",
-#                          "scompcard", "dislip", "diab", "renal", "cortic",
-#                          "antiang", "antitromb", "ipolip", "antidiab", "bifosf",
-#                          "switch_apalu", "switch_enzalu", "switch_darolu",
-#                          "switch_other_oncol")
+#   covariates_binary <- c("iperpoliterapia", "rsa_adi", "cardiocircolatoria", "reumatologica", "gastroenterologica", "esenzione_qualsiasi")
+#
 # 
 #   D5_cov <- NULL
 # 
 #   for (i in covariates_binary) {
 # 
-#     tmp <- data[drug==j, .(
+#     tmp <- data[fasciaeta==j, .(
 #                 N = .N,
 #                 tmp_N = sum(get(i)==1),
 #                 tmp_p = round(sum(get(i)==1)/.N,3)*100),
-#                 .(period_first, ASL, user_type)]
+#                 .(ASL)]
 # 
 #     setnames(tmp,"tmp_N",paste0(i, "_N"))
 #     setnames(tmp,"tmp_p",paste0(i, "_p"))
@@ -65,19 +62,19 @@ for (j in fasce_eta) {
 # 
 #     } else {
 # 
-#       D5_cov <- merge(D5_cov, tmp, by = c("period_first", "ASL", "user_type", "N"))
+#       D5_cov <- merge(D5_cov, tmp, by = c("ASL", "N"))
 #     }
 # 
 #   }
 # 
 #   # create the final D5 by merging the previous two
-#   D5 <- merge(D5_nocov, D5_cov, by = c("period_first", "ASL", "user_type","N"), all = F)
+#   D5 <- merge(D5_nocov, D5_cov, by = c("ASL","N"), all = F)
 # 
 #   assign(paste0("D5_",j), D5)
 # 
 # }
 # 
-# for (j in drug_names) {
+# for (j in fasce_eta) {
 # 
 #   saveRDS(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_", j, ".rds"))
 #   write.csv(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_", j, ".csv"))
