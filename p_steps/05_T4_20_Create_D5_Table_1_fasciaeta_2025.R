@@ -59,6 +59,8 @@ for (j in fasce_eta) {
   distr <- as.data.table(distr)
   
   distr_l <- melt(distr[, N:=NULL],
+                  measure.vars = names(distr),
+                  variable.name = "variable",
                   value.name = "atc")
   
   distr_l <- setorder(distr_l, -atc)
@@ -107,8 +109,8 @@ for (j in fasce_eta) {
 # save
 for (j in fasce_eta) {
 
-  saveRDS(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Table_1_", j, ".rds"))
-  write.csv(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Table_1_", j, ".csv"))
+  saveRDS(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Tabella_1_caratterizzazione_2025_", j, ".rds"))
+  write.csv(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Tabella_1_caratterizzazione_2025_", j, ".csv"))
 
 }
 
