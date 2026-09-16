@@ -17,6 +17,7 @@ library(truncnorm)
 
 
 
+
 # name of the dataset to be generated
 namedataset <- "D3_coorte_con_caratterizzazione"
 
