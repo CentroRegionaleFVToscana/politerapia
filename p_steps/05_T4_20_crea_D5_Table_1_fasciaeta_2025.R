@@ -24,6 +24,10 @@ if (TEST){
 data <- readRDS(file = paste0(thisdirinput, "/D3_coorte_con_caratterizzazione.rds"))
 data <- as.data.table(data)
 
+atc <- unique(unlist(strsplit(data[,atc_5_almeno_3],"_")))
+data[,(atc):=lapply(atc,function(x) as.integer(grepl(paste0("(^|_)", x, "(_|$)"),data[,atc_5_almeno_3])))]
+
+
 # to be removed
 fasce_eta <- c("40-64", "65-84", "85+")
 
@@ -39,16 +43,39 @@ for (j in fasce_eta) {
                 .(asl)]
   
   
+  # extract 5 most frequent ATC V level
+  distr <- data.frame(N=1)
   
+  for (k in atc) {
+    
+    tmp <- data.frame(sum(data[fasciaeta==j, get(k)==TRUE]))
+    
+    colnames(tmp) <- k
+    
+    distr <- cbind(distr, tmp)
+    
+  }
+  
+  distr <- as.data.table(distr)
+  
+  distr_l <- melt(distr[, N:=NULL],
+                  value.name = "atc")
+  
+  distr_l <- setorder(distr_l, -atc)
+  
+  distr_l_sel <- distr_l[c(1:5) ,]
+  
+  variable_names <- distr_l_sel[, as.character(variable)]
   
 
   # create D5 with binary covariates
   covariates_binary <- c("iperpoliterapia", "rsa_adi", "cardiocircolatoria", "reumatologica", "gastroenterologica", "esenzione_qualsiasi")
 
+  covariates_full <- c(covariates_binary, variable_names)
 
   D5_cov <- NULL
 
-  for (i in covariates_binary) {
+  for (i in covariates_full) {
 
     tmp <- data[fasciaeta==j, .(
                 N = .N,
@@ -77,22 +104,11 @@ for (j in fasce_eta) {
 
 }
 
-# for (j in fasce_eta) {
-# 
-#   saveRDS(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_", j, ".rds"))
-#   write.csv(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_", j, ".csv"))
+# save
+for (j in fasce_eta) {
 
-  # # save
-  # if (TEST & type_data_test=="simulation") {
-  #
-  #   saveRDS(D5, file = paste0(thisdiroutput, "/D5_from_simulation_", j, ".rds"))
-  #   write.csv(D5, file = paste0(thisdiroutput, "/D5_from_simulation_", j, ".csv"))
-  #
-  # } else if (TEST & type_data_test=="dummy") {
-  #
-  #   saveRDS(D5, file = paste0(thisdiroutput, "/D5_from_dummy_data_", j,".rds"))
-  #   write.csv(D5, file = paste0(thisdiroutput, "/D5_from_dummy_data_", j,".csv"))
-  #
-  # }
+  saveRDS(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Table_1_", j, ".rds"))
+  write.csv(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Table_1_", j, ".csv"))
 
 }
+
