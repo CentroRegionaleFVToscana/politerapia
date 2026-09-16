@@ -1,0 +1,11 @@
+﻿person_id;asl;age;genere;iperpoliterapia;rsa_adi;cardiocircolatoria;reumatologica;gastroenterologica;esenzione_qualsiasi;fasciaeta
+P01;CE;43;M;0;0;0;1;0;0;40-64
+P02;NO;60;F;1;1;0;1;0;0;40-64
+P03;CE;52;F;1;1;0;1;0;0;40-64
+P04;NO;90;M;1;0;1;1;0;1;85+
+P05;SE;68;M;1;0;0;1;1;1;65-84
+P06;SE;56;F;1;1;1;0;1;0;40-64
+P07;SE;87;M;1;0;0;0;1;0;85+
+P08;CE;61;M;0;1;0;1;0;1;40-64
+P09;NO;49;F;0;1;1;0;0;0;40-64
+P10;SE;65;M;1;0;0;1;1;0;65-84

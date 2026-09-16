@@ -18,6 +18,9 @@ if (TEST){
 
 
 # load data
+
+# dummy data
+# data <- read.csv(paste0(thisdirinput, "/D3_coorte_con_caratterizzazione_dummy.csv"), sep = ";")
 data <- readRDS(file = paste0(thisdirinput, "/D3_coorte_con_caratterizzazione.rds"))
 data <- as.data.table(data)
 
@@ -33,47 +36,47 @@ for (j in fasce_eta) {
                 genere_F_N = sum(genere=="F"),
                 genere_F_p = round(sum(genere=="F")/.N,3)*100),
                 # aggiungere ulteriori covariate
-                .(ASL)]
+                .(asl)]
   
   
   
   
 
   # create D5 with binary covariates
-#   covariates_binary <- c("iperpoliterapia", "rsa_adi", "cardiocircolatoria", "reumatologica", "gastroenterologica", "esenzione_qualsiasi")
-#
-# 
-#   D5_cov <- NULL
-# 
-#   for (i in covariates_binary) {
-# 
-#     tmp <- data[fasciaeta==j, .(
-#                 N = .N,
-#                 tmp_N = sum(get(i)==1),
-#                 tmp_p = round(sum(get(i)==1)/.N,3)*100),
-#                 .(ASL)]
-# 
-#     setnames(tmp,"tmp_N",paste0(i, "_N"))
-#     setnames(tmp,"tmp_p",paste0(i, "_p"))
-# 
-#     if (is.null(D5_cov)) {
-# 
-#       D5_cov <- tmp
-# 
-#     } else {
-# 
-#       D5_cov <- merge(D5_cov, tmp, by = c("ASL", "N"))
-#     }
-# 
-#   }
-# 
-#   # create the final D5 by merging the previous two
-#   D5 <- merge(D5_nocov, D5_cov, by = c("ASL","N"), all = F)
-# 
-#   assign(paste0("D5_",j), D5)
-# 
-# }
-# 
+  covariates_binary <- c("iperpoliterapia", "rsa_adi", "cardiocircolatoria", "reumatologica", "gastroenterologica", "esenzione_qualsiasi")
+
+
+  D5_cov <- NULL
+
+  for (i in covariates_binary) {
+
+    tmp <- data[fasciaeta==j, .(
+                N = .N,
+                tmp_N = sum(get(i)==1),
+                tmp_p = round(sum(get(i)==1)/.N,3)*100),
+                .(asl)]
+
+    setnames(tmp,"tmp_N",paste0(i, "_N"))
+    setnames(tmp,"tmp_p",paste0(i, "_p"))
+
+    if (is.null(D5_cov)) {
+
+      D5_cov <- tmp
+
+    } else {
+
+      D5_cov <- merge(D5_cov, tmp, by = c("asl", "N"))
+    }
+
+  }
+
+  # create the final D5 by merging the previous two
+  D5 <- merge(D5_nocov, D5_cov, by = c("asl","N"), all = F)
+
+  assign(paste0("D5_",j), D5)
+
+}
+
 # for (j in fasce_eta) {
 # 
 #   saveRDS(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_", j, ".rds"))
