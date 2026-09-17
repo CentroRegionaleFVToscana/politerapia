@@ -89,43 +89,43 @@ for (k in fasce_eta) {
   row_header_1 <- c()
   j            <- -1
 
-  # row 2
+  # row 1
   row_header_1 <- c(row_header_1, "ASL")
   j <- j + 1
   tab_nice[, cell := asl]
   setnames(tab_nice, "cell", paste0("cell_", j))
 
-  # row 4
+  # row 2
   row_header_1 <- c(row_header_1, "Totale")
   j <- j + 1
   tab_nice[, cell := as.character(N)]
   setnames(tab_nice, "cell", paste0("cell_", j))
 
-  # row 7
+  # row 3
   row_header_1 <- c(row_header_1, "Donne, n (%)")
   j <- descriptive_N_perc(j, "genere_F_")
 
-  # row 9
+  # row 4
   row_header_1 <- c(row_header_1, "Pazienti in iper-politerapia (≥10 farmaci ATC IV nello stesso mese per 3 mesi su 12)")
   j <- descriptive_N_perc(j, "iperpoliterapia_")
   
-  # row 21
+  # row 5
   row_header_1 <- c(row_header_1, "Principi attivi più utilizzati (ATC V livello dispensati ≥ 3 volte in un anno)")
   j <- add_empty_row(j)
 
-  # row 10
+  # row 6
   row_header_1 <- c(row_header_1, variable_names_full[[k]][1])
   j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][1], "_"))
 
-  # row 10
+  # row 7
   row_header_1 <- c(row_header_1, variable_names_full[[k]][2])
   j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][2], "_"))
   
-  # row 10
+  # row 8
   row_header_1 <- c(row_header_1, variable_names_full[[k]][3])
   j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][3], "_"))
   
-  # row 10
+  # row 9
   row_header_1 <- c(row_header_1, variable_names_full[[k]][4])
   j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][4], "_"))
   
@@ -133,124 +133,42 @@ for (k in fasce_eta) {
   row_header_1 <- c(row_header_1, variable_names_full[[k]][5])
   j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][5], "_"))
 
-  # row 21
+  # row 11
   row_header_1 <- c(row_header_1, "Contesto assistenziale")
   j <- add_empty_row(j)
 
+  # row 12
+  row_header_1 <- c(row_header_1, "RSA e/o ADI (≥1 giorno durate l’anno)")
+  j <- descriptive_N_perc(j, "rsa_adi_")
+
   # row 13
-  row_header_1 <- c(row_header_1, "Angina")
-  j <- descriptive_N_perc(j, "angi_")
+  row_header_1 <- c(row_header_1, "Esenzione per patologia cronica")
+  j <-  add_empty_row(j)
 
   # row 14
-  row_header_1 <- c(row_header_1, "Ictus ischemico o emorragico")
-  j <- descriptive_N_perc(j, "ictus_")
-
+  row_header_1 <- c(row_header_1, "Cardiocircolatoria")
+  j <- descriptive_N_perc(j, "cardiocircolatoria_")
+  
   # row 15
-  row_header_1 <- c(row_header_1, "Attacco ischemico transitorio (TIA)")
-  j <- descriptive_N_perc(j, "tia_")
+  row_header_1 <- c(row_header_1, "Reumatologica")
+  j <- descriptive_N_perc(j, "reumatologica_")
   
   # row 16
-  row_header_1 <- c(row_header_1, "Scompenso cardiaco")
-  j <- descriptive_N_perc(j, "scompcard_")
+  row_header_1 <- c(row_header_1, "Gastroenterologica")
+  j <- descriptive_N_perc(j, "gastroenterologica_")
   
   # row 17
-  row_header_1 <- c(row_header_1, "Dislipidemia")
-  j <- descriptive_N_perc(j, "dislip_")
+  row_header_1 <- c(row_header_1, "≥1 esenzione per qualsiasi malattia cronica")
+  j <- descriptive_N_perc(j, "esenzione_qualsiasi_")
   
-  # row 18
-  row_header_1 <- c(row_header_1, "Diabete mellito")
-  j <- descriptive_N_perc(j, "diab_")
   
-  # row 19
-  row_header_1 <- c(row_header_1, "Insufficienza renale cronica")
-  j <- descriptive_N_perc(j, "renal_") 
-  
-  # row 20
-  row_header_1 <- c(row_header_1, "Trattamenti concomitanti, media (DS)")
-  j <- descriptive_median_q1q3(j, "conc_treat")
-  
-  # row 21
-  row_header_1 <- c(row_header_1, "Farmaci concomitanti")
-  j <- add_empty_row(j)
-  
-  # row 22
-  row_header_1 <- c(row_header_1, "Corticosteroidi")
-  j <- descriptive_N_perc(j, "cortic_")
-  
-  # row 20
-  row_header_1 <- c(row_header_1, "Antianginosi")
-  j <- descriptive_N_perc(j, "antiang_") 
-  
-  # row 23
-  row_header_1 <- c(row_header_1, "Antitrombotici")
-  j <- descriptive_N_perc(j, "antitromb_") 
-  
-  # row 24
-  row_header_1 <- c(row_header_1, "Ipolipemizzanti")
-  j <- descriptive_N_perc(j, "ipolip_")
-  
-  # row 25
-  row_header_1 <- c(row_header_1, "Antidiabetici")
-  j <- descriptive_N_perc(j, "antidiab_")
-  
-  # row 26
-  row_header_1 <- c(row_header_1, "Bifosfonati")
-  j <- descriptive_N_perc(j, "bifosf_")
-  
-  # row 27
-  row_header_1 <- c(row_header_1, "Interruzione trattamento a 12 mesi")
-  j <- descriptive_N_perc(j, "discont_12_")
-  
-  # row 27
-  row_header_1 <- c(row_header_1, "Interruzione trattamento a 24 mesi")
-  j <- descriptive_N_perc(j, "discont_24_")
-  
-  # row 28
-  row_header_1 <- c(row_header_1, "Switch")
-  j <- add_empty_row(j)
-  
-  # row 29
-  row_header_1 <- c(row_header_1, "Vs apalutamide a 12 mesi")
-  j <- descriptive_N_perc(j, "switch_apalu_12_")
-  
-  # row 30
-  row_header_1 <- c(row_header_1, "Vs enzalutamide a 12 mesi")
-  j <- descriptive_N_perc(j, "switch_enzalu_12_")
-  
-  # row 31
-  row_header_1 <- c(row_header_1, "Vs darolutamide a 12 mesi")
-  j <- descriptive_N_perc(j, "switch_darolu_12_")
-  
-  # row 32
-  row_header_1 <- c(row_header_1, "Vs altri farmaci oncologici (L01) a 12 mesi")
-  j <- descriptive_N_perc(j, "switch_other_oncol_12_")
-  
-  # row 29
-  row_header_1 <- c(row_header_1, "Vs apalutamide a 24 mesi")
-  j <- descriptive_N_perc(j, "switch_apalu_24_")
-  
-  # row 30
-  row_header_1 <- c(row_header_1, "Vs enzalutamide a 24 mesi")
-  j <- descriptive_N_perc(j, "switch_enzalu_24_")
-  
-  # row 31
-  row_header_1 <- c(row_header_1, "Vs darolutamide a 24 mesi")
-  j <- descriptive_N_perc(j, "switch_darolu_24_")
-  
-  # row 32
-  row_header_1 <- c(row_header_1, "Vs altri farmaci oncologici (L01) a 24 mesi")
-  j <- descriptive_N_perc(j, "switch_other_oncol_24_")
-  
-  # row 32
-  row_header_1 <- c(row_header_1, "Ri-iniziatori")
-  j <- descriptive_N_perc(j, "restarter_")
 
 
   #########################################
   # KEEP CELLS
 
   cell_cols <- grep("^cell_", names(tab_nice), value = TRUE)
-  tokeep <- c("period_first", "ASL", "user_type", cell_cols)
+  tokeep <- c("asl", cell_cols)
   tab_nice <- tab_nice[, ..tokeep]
 
 
@@ -261,7 +179,7 @@ for (k in fasce_eta) {
 
   tab_nice <- melt(
     tab_nice,
-    id.vars = c("period_first", "ASL", "user_type"),
+    id.vars = c("asl"),
     measure.vars = patterns(
       cell = "^cell_[0-9]+$"
     ),
@@ -270,14 +188,14 @@ for (k in fasce_eta) {
 
   tab_nice[, rownum := as.integer(rownum)]
 
-  setorder(tab_nice, rownum, period_first, ASL, user_type)
+  setorder(tab_nice, rownum, asl)
 
 
   # then reshape from long to wide keeping rownum as the UoO
 
   tab_nice <- dcast(
     tab_nice,
-    rownum ~ period_first + ASL +user_type,
+    rownum ~ asl,
     value.var = "value"
   )
 
