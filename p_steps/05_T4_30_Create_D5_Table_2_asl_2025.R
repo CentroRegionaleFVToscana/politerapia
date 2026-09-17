@@ -27,10 +27,6 @@ atc_IV_levels <- unique(substring(atc, 1, 5))
 data[,(atc_IV_levels):=lapply(atc_IV_levels, function(x) as.integer(grepl(paste0("(^|_)", x), data[,atc_5_almeno_3])))]
 
 
-# to be removed
-asl <- c("CE", "NO", "SE")
-
-
 for (j in asl) {
 
   
