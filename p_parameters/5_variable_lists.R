@@ -2,6 +2,10 @@
 # DESCRIBE THE VARIABLES
 ###################################################################
 
+asl <- c("CE", "NO", "SE")
+
+fasce_eta <- c("40-64", "65-84", "85+")
+
 var_selection <- c("sel_data_incomplete", "sel_no_obs_periods",
                    "sel_obs_period_not_overlapped_study_period", 
                    "sel_no_drug", "sel_no_drug_during_obs_period",
