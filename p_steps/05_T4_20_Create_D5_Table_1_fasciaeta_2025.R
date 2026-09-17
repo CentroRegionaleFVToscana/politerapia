@@ -27,9 +27,8 @@ data <- as.data.table(data)
 atc <- unique(unlist(strsplit(data[,atc_5_almeno_3],"_")))
 data[,(atc):=lapply(atc,function(x) as.integer(grepl(paste0("(^|_)", x, "(_|$)"),data[,atc_5_almeno_3])))]
 
-
-# to be removed
-fasce_eta <- c("40-64", "65-84", "85+")
+# store names of the five drugs (V level) most frequently dispensed
+variable_names_full <- NULL
 
 
 for (j in fasce_eta) {
@@ -103,6 +102,8 @@ for (j in fasce_eta) {
   D5 <- merge(D5_nocov, D5_cov, by = c("asl","N"), all = F)
 
   assign(paste0("D5_",j), D5)
+  
+  variable_names_full[[j]] <- variable_names
 
 }
 
