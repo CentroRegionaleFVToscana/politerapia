@@ -194,17 +194,17 @@ nameoutput <- "D6_Table_S1_attrition"
 assign(nameoutput, outputfile)
 
 # rds
-saveRDS(outputfile, file = file.path(thisdiroutput, paste0(nameoutput,"_", k,".rds")))
+saveRDS(outputfile, file = file.path(thisdiroutput, paste0(nameoutput, ".rds")))
 # csv
-fwrite(outputfile, file = file.path(thisdiroutput, paste0(nameoutput,"_", k,".csv")))
+fwrite(outputfile, file = file.path(thisdiroutput, paste0(nameoutput, ".csv")))
 # xls
-write_xlsx(outputfile, file.path(thisdiroutput, paste0(nameoutput,"_", k,".xlsx")))
+write_xlsx(outputfile, file.path(thisdiroutput, paste0(nameoutput,".xlsx")))
 # html
 # html_table <- kable(outputfile, format = "html", escape = FALSE) %>% kable_styling(full_width = F, bootstrap_options = c("striped", "hover"))
 # writeLines(html_table, file.path(thisdiroutput, paste0(nameoutput,"_", k,".html")))
 # rtf
 doc <- read_docx() %>% body_add_table(outputfile, style = "table_template", header = F) %>% body_end_section_continuous()
-print(doc, target = file.path(thisdiroutput, paste0(nameoutput,"_", k,".docx")))
+print(doc, target = file.path(thisdiroutput, paste0(nameoutput, ".docx")))
 
 
   
