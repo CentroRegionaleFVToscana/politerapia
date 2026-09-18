@@ -26,6 +26,8 @@ atc <- unique(unlist(strsplit(data[,atc_5_almeno_3],"_")))
 atc_IV_levels <- unique(substring(atc, 1, 5))
 data[,(atc_IV_levels):=lapply(atc_IV_levels, function(x) as.integer(grepl(paste0("(^|_)", x), data[,atc_5_almeno_3])))]
 
+variable_names_full <- NULL
+
 
 for (j in asl) {
 
@@ -86,11 +88,13 @@ for (j in asl) {
   }
 
   assign(paste0("D5_",j), D5_cov)
+  variable_names_full[[j]] <- variable_names
+  
 
 }
 
 # save
-for (j in fasce_eta) {
+for (j in asl) {
 
   saveRDS(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Table_2_combinazioni_farmaci_2025_", j, ".rds"))
   write.csv(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Table_2_combinazioni_farmaci_2025_", j, ".csv"))
