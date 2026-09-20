@@ -1,6 +1,6 @@
 # author: Rosa Gini
 
-# v 1.0 24 Nov 2024
+# v 1.0 26 Aug 2026
 
 #########################################
 # assign input and output directories
@@ -17,6 +17,12 @@ if (TEST){
 
 processing <- fread(file.path(thisdirinput,"ANAGRAFE_ASSISTITI.csv"))
 
+date_cols <- c("data_inizioass", "data_fineass", "datadec", "datanas")
+
+for (datevar in date_cols) {
+  print(datevar)
+  processing[, (datevar) := ymd(get(datevar))]
+}
 
 setorderv(processing, c("id", "data_inizioass"))
 
@@ -32,10 +38,13 @@ processing <- processing[sesso == 2, gender := "F"]
 processing[, birth_date := as.Date(datanas)]
 processing[, death_date := as.Date(datadec)]
 
+processing[, birth_date_or_gender_invalid := fifelse( is.na(gender) | is.na(birth_date), 1,0)]
+
+
 ################################
 # clean
 
-tokeep <- c("person_id", "gender", "birth_date","death_date")
+tokeep <- c("person_id", "gender", "birth_date","death_date", "birth_date_or_gender_invalid")
 
 processing <- processing[, ..tokeep]
 
