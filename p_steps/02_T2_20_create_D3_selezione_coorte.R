@@ -7,10 +7,12 @@
 if (TEST){
   testname <- "test_D3_selezione_coorte"
   thisdirinput <- file.path(dirtest,testname)
+  thisdirinputcsv <- thisdirinput
   thisdiroutput <- file.path(dirtest,testname,"g_output")
   dir.create(thisdiroutput, showWarnings = F)
 }else{
   thisdirinput <- dirtemp
+  thisdirinputcsv <- dirinput
   thisdiroutput <- dirtemp
 }
 
@@ -20,8 +22,8 @@ index_date <- ymd(paste0(i, "1231"))
 
 # load data
 
-medicines <- rbind(fread(file.path(thisdirinput, paste0("spf",i,".csv"))),
-                   fread(file.path(thisdirinput, paste0("fed",i,".csv"))))
+medicines <- rbind(fread(file.path(thisdirinputcsv, paste0("spf",i,".csv"))),
+                   fread(file.path(thisdirinputcsv, paste0("fed",i,".csv"))))
 
 listdates <- c("datasped")
 medicines[, (listdates) := lapply(.SD, ymd), .SDcols = listdates]
