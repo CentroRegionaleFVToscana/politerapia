@@ -74,7 +74,7 @@ row_header_1 <- c()
 j            <- -1
 
 # row 1
-row_header_1 <- c(row_header_1, "Soggetti con un observation period che overlappa lo study period (istanza)")
+row_header_1 <- c(row_header_1, "Soggetti con un farmaco tra il 2023 e il 2025 e in anagrafe nel 2025 (istanza)")
 j <- j + 1
 tab_nice[, cell := as.character(N)]
 setnames(tab_nice, "cell", paste0("cell_", j))
@@ -192,7 +192,7 @@ setcolorder(tab_nice, c("row_header", data_cols))
 # SAVE
 
 outputfile <- tab_nice
-nameoutput <- "D6_Table_S1_attrition"
+nameoutput <- paste0("D6_Table_S1_attrition_",year)
 assign(nameoutput, outputfile)
 
 # rds
