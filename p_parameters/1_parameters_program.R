@@ -32,14 +32,13 @@ dirtemp <- set_and_create_dir(paste0(dirinput,"/g_intermediate/"))
 dirconceptsets <- set_and_create_dir(paste0(dirinput,"/g_intermediate/conceptset_datasets/"))
 # diritemsets <- set_and_create_dir("/g_intermediate/itemset_datasets/")
 # dirpromptsets <- set_and_create_dir("/g_intermediate/promptset_datasets/")
-direxp <- set_and_create_dir(paste0(dirinput,"/g_export/"))
-dirD6 <- set_and_create_dir(paste0(dirinput,"/g_export/Formatted tables/"))
-dirfig <- set_and_create_dir(paste0(direxp,"/Figures/"))
-dirmacro <- paste0(thisdir,"/p_macro/")
 dirpargen <- set_and_create_dir(paste0(dirinput,"/g_parameters/"))
 # direvents <- set_and_create_dir("/g_intermediate/events/")
 # dircomponents <- set_and_create_dir("/g_intermediate/components/")
 # dirTD <- set_and_create_dir("/g_intermediate/TD/")
+
+direxp <- paste0(thisdir,"/g_export/")
+dir.create(direxp, showWarnings = F)
 
 
 rm(set_and_create_dir)

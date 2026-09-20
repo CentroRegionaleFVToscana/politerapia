@@ -17,9 +17,10 @@ if (TEST){
   thisdiroutput <- direxp
 }
 
+year <- 2025
 
 # load
-D5 <- read.csv(paste0(thisdirinput, "D5_Table_S1_attrition.csv"))
+D5 <- read.csv(paste0(thisdirinput, "D5_Table_S1_attrition_",year,".csv"))
 D5 <- as.data.table(D5)
 assign("D5_Table_S1_attrition", D5)
   

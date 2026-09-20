@@ -17,9 +17,12 @@ if (TEST){
 
 
 # load data
+
+year <- 2025
+
 # D3_selezione_coorte <- read.csv(file = paste0(thisdirinput, "/D3_selezione_coorte_dummy.csv"), sep = ";")
 
-data <- readRDS(file = paste0(thisdirinput, "/D3_selezione_coorte.rds"))
+data <- readRDS(file = paste0(thisdirinput, "/D3_selezione_coorte_",year,".rds"))
 data <- as.data.table(data)
   
 assign("D3_selezione_coorte", data)
@@ -67,6 +70,6 @@ for (i in var_selection) {
   
 
 # save
-saveRDS(D5_attrition, file = paste0(thisdiroutput, "/D5_Table_S1_attrition.rds"))
-write.csv(D5_attrition, file = paste0(thisdiroutput, "/D5_Table_S1_attrition.csv"))
+saveRDS(D5_attrition, file = paste0(thisdiroutput, "/D5_Table_S1_attrition_",year,".rds"))
+write.csv(D5_attrition, file = paste0(thisdiroutput, "/D5_Table_S1_attrition_",year,".csv"))
 
