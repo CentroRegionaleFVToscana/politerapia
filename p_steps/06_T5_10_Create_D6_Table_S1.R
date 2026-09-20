@@ -74,22 +74,21 @@ row_header_1 <- c()
 j            <- -1
 
 # row 1
-row_header_1 <- c(row_header_1, "Soggetti con un farmaco tra il 2023 e il 2025 e in anagrafe nel 2025 (istanza)")
+row_header_1 <- c(row_header_1, "Soggetti con un farmaco tra il 2023 e il 2025 e in anagrafe almeno un giorno tra il 2023 e il 2025 (istanza)")
 j <- j + 1
 tab_nice[, cell := as.character(N)]
 setnames(tab_nice, "cell", paste0("cell_", j))
 
 # row 2
-row_header_1 <- c(row_header_1, paste0("Soggetti assistibili in Toscana al 31/12/", year_p, " (data indice)
-                                        con data di nascita e sesso compilati e validi"))
+row_header_1 <- c(row_header_1, paste0("Soggetti con data di nascita e sesso compilati e validi"))
 j <- descriptive_N_perc(j, "sel_data_incomplete_")
 
 # row 3
-row_header_1 <- c(row_header_1, "Soggetti con un periodo di osservazione")
+row_header_1 <- c(row_header_1, "Soggetti con un periodo di osservazione nel 2025")
 j <- descriptive_N_perc(j, "sel_no_obs_periods_")
 
 # row 4
-row_header_1 <- c(row_header_1, "Soggetti con un periodo di osservazione coincidente con il periodo di studio")
+row_header_1 <- c(row_header_1, "Soggetti con un periodo di osservazione che comprende la data indice 31/12/", year)
 j <- descriptive_N_perc(j, "sel_obs_period_not_overlapped_study_period_")
 
 # row 5
