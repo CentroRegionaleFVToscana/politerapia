@@ -16,9 +16,11 @@ TheShinISS_CDM_tables[["Medicines"]] = inputfiles[str_detect(inputfiles, "^fed")
 TheShinISS_CDM_tables[["Medicines"]] = c(TheShinISS_CDM_tables[["Medicines"]], inputfiles[str_detect(inputfiles, "^spf")])
 TheShinISS_CDM_tables[["Procedures"]]= c("sdoproc")
 
-# assign -TheShinISS_CDM_codvar- and -TheShinISS_CDM_coding_system_cols-: they are also 2-level lists, they encode from the data model the name of the column(s) of each table that contain, respectively the code and the coding system, corresponding to a data domain the table belongs to
 
 alldomain <- unique(names(TheShinISS_CDM_tables))
+
+# assign -TheShinISS_CDM_codvar-: it is also 2-level lists, encoding from the data model the name of the column(s) of each table that contain the code, corresponding to a data domain the table belongs to
+
 
 TheShinISS_CDM_codvar <- vector(mode="list")
 
@@ -34,6 +36,15 @@ TheShinISS_CDM_codvar[["Diagnosis"]][["ps"]] = c("dia")
 TheShinISS_CDM_codvar[["Diagnosis"]][["exe"]] = c("dia")
 TheShinISS_CDM_codvar[["Procedures"]][["sdoproc"]] = c("int")
 # TheShinISS_CDM_codvar[["Procedures"]][["SDOTEMP"]] = c("CODCHI2","CODCHI3","CODCHI4", "CODCHI5","CODCHI6" ,"CODCHI")
+
+# assign -TheShinISS_CDM_coding_system_cols-: it is also 2-level lists, encoding from the data model the name of the column(s) of each table that contain the coding system, corresponding to a data domain the table belongs to; we only define it for coding system Diagnosis (the only one where TheShinISS tables may have > 1 coding system)
+
+TheShinISS_CDM_coding_system_cols <- list()
+TheShinISS_CDM_coding_system_cols[["Diagnosis"]][["sdo"]] = c("nome_codifica")
+TheShinISS_CDM_coding_system_cols[["Diagnosis"]][["ps"]] = c("nome_codifica")
+TheShinISS_CDM_coding_system_cols[["Diagnosis"]][["exe"]] = c("nome_codifica")
+
+
 
 # assign 2 more 3-level lists: -id- -date-. They encode from the data model the name of the column(s) of each data table that contain, respectively, the personal identifier and the date. Those 2 lists are to be inputted in the rename_col option of the function. 
 #NB: GENERAL  contains the names columns will have in the final datasets

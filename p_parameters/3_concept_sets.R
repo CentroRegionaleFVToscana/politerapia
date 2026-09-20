@@ -38,11 +38,10 @@ name_codelist[["dia_dislip"]] <- "Diagnoses contributing to the algorithm on dis
 name_codelist[["dia_diab"]] <- "Diagnoses contributing to the algorithm on diab (Table B of the protocol)"
 name_codelist[["dia_renal"]] <- "Diagnoses contributing to the algorithm on renal (Table B of the protocol)"
 name_codelist[["dia_ictus"]] <- "Diagnoses contributing to the algorithm on ictus (Table B of the protocol)"
-name_codelist[[""]] <- ""
-name_codelist[[""]] <- ""
-name_codelist[[""]] <- ""
-name_codelist[[""]] <- ""
-
+name_codelist[["ese_cardio"]] <- "Esenzione per malattia cardiovascolare"
+name_codelist[["ese_reuma"]] <- "Esenzione per malattia reumatologica"
+name_codelist[["ese_gastro"]] <- "Esenzione per malarria gastroenterologica"
+name_codelist[["ese_altra_cronica"]] <- "Esenzione per altra malattia cronica"
 
 
 # -concept_set_domains- is a 2-level list encoding for each concept set the corresponding data domain

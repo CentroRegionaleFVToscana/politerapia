@@ -42,6 +42,7 @@ CreateConceptSetDatasets(dataset = TheShinISS_CDM_tables,
                          concept_set_codes =	concept_set_codes_our_study,
                          concept_set_names = concept_sets_of_our_study_diagnosis,
                          concept_set_codes_excl = concept_set_codes_our_study_excl,
+                         vocabulary = TheShinISS_CDM_coding_system_cols,
                          dirinput = thisdirinput,
                          diroutput = thisdiroutput,
                          extension = c("csv"))
