@@ -17,9 +17,10 @@ library(lubridate)
 
 # list of datasets
 
-listdatasetsRData <- c("abira","apalu","enzalu", "darolu")
+listdatasetsRData <- c()
+listdatasetscsv <- c("spf2025", "fed2025")
 
-listdatasets <- c("D3_PERSONS", "D3_OBSPERIODS", "D3_ASL",listdatasetsRData)
+listdatasets <- c("D3_PERSONS", "D3_OBSPERIODS", "D3_ASL",listdatasetsRData, listdatasetscsv)
 
 # dates variables 
 
@@ -37,6 +38,10 @@ for (dataset in listdatasetsRData) {
   
 }
 
+for (dataset in listdatasetscsv) {
+  listdates[[dataset]] <- c("datasped")
+  
+}
 
 # date baseline
 
@@ -69,7 +74,10 @@ for (namedataset in listdatasets){
   assign(namedataset,data)
   if (namedataset %in% listdatasetsRData){
     save(data, file = file.path(thisdir, paste0(namedataset,".RData")), list = namedataset)
-  }else{
+  }else if (namedataset %in% listdatasetscsv){
+    data[, (listdates[[namedataset]]) := lapply(.SD, format, "%Y%m%d"), .SDcols = listdates[[namedataset]]]
+    fwrite(data, file.path(thisdir, paste0(namedataset,".csv") ))
+    }else{
   saveRDS(data, file = file.path(thisdir, paste0(namedataset,".rds")))
   }
 }

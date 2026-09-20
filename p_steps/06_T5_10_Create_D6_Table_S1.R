@@ -92,12 +92,13 @@ row_header_1 <- c(row_header_1, "Soggetti con un periodo di osservazione coincid
 j <- descriptive_N_perc(j, "sel_obs_period_not_overlapped_study_period_")
 
 # row 5
+row_header_1 <- c(row_header_1, "Soggetti di età >= 40 anni alla data indice")
+j <- descriptive_N_perc(j, "sel_younger_than_40_")
+
+# row 6
 row_header_1 <- c(row_header_1, "Soggetti con almeno 3 anni di osservazione disponibili prima della data indice")
 j <- descriptive_N_perc(j, "sel_no_lookback_")
 
-# row 6
-row_header_1 <- c(row_header_1, "Soggetti di età >40 anni alla data indice")
-j <- descriptive_N_perc(j, "sel_younger_than_40_")
 
 # row 7
 row_header_1 <- c(row_header_1, "Soggetti con ASL registrata alla data indice")

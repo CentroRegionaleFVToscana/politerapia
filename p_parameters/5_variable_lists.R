@@ -11,8 +11,8 @@ year_p <- "2025"
 var_selection <- c("sel_data_incomplete", 
                    "sel_no_obs_periods", 
                    "sel_obs_period_not_overlapped_study_period",
-                   "sel_no_lookback",
                    "sel_younger_than_40",
+                   "sel_no_lookback",
                    "sel_no_ASL",
                    "sel_no_polypharmacy",
                    "is_in_study")
