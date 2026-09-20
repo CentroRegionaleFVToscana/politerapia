@@ -1,20 +1,17 @@
 ###################################################################
 # DESCRIBE THE CONCEPT SETS
 ###################################################################
-concept_sets_of_our_study_drugs <- c("abira","apalu","enzalu", "darolu", "med_iperten", "med_cardioisc_angi", "med_dislip", "med_diab", "med_RENDIS_Alg1_1", "med_RENDIS_Alg1_2", "med_RENDIS_Alg1_3", "med_RENDIS_Alg2", "med_cortic", "med_antiang", "med_antitromb",  "med_bifos")
+concept_sets_of_our_study_drugs <- c()
 
-concept_sets_of_our_study_diagnosis <- c("dia_iperten","dia_cardioisc","dia_angi","dia_dislip","dia_diab","dia_renal", "dia_ictus", "dia_ima", "dia_aritmie")
+# "med_iperten", "med_cardioisc_angi", "med_dislip", "med_diab", "med_RENDIS_Alg1_1", "med_RENDIS_Alg1_2", "med_RENDIS_Alg1_3", "med_RENDIS_Alg2", "med_cortic", "med_antiang", "med_antitromb",  "med_bifos"
 
-drug_names <- c("abira", "apalu", "enzalu", "darolu")
+concept_sets_of_our_study_diagnosis <- c("ese_cardio","ese_reuma", "ese_gastro", "ese_altra_cronica")
+
+# "dia_iperten","dia_cardioisc","dia_angi","dia_dislip","dia_diab","dia_renal", "dia_ictus", "dia_ima", "dia_aritmie", 
 
 # names of the concept sets
 
 name_codelist <- list()
-
-name_codelist[["abira"]] = "Abiraterone"
-name_codelist[["apalu"]] = "Apalutamide"
-name_codelist[["enzalu"]] = "Enzalutamide"
-name_codelist[["darolu"]] = "Darolutamide"
 
 
 name_codelist[["med_iperten"]] <- "Medicines contributing to the algorithm on iperten (Table B of the protocol)"
@@ -96,4 +93,10 @@ concept_set_codes_our_study[["dia_ictus"]][["ICD9"]] <- c()
 concept_set_codes_our_study[[""]][["ICD9"]] <- c()
 concept_set_codes_our_study[[""]][["ICD9"]] <- c()
 concept_set_codes_our_study[[""]][["ICD9"]] <- c()
-concept_set_codes_our_study[[""]][["ICD9"]] <- c()
+
+
+concept_set_codes_our_study[["ese_cardio"]][["CODESE"]] <- c("0A02", "021", "0A31", "0031")
+concept_set_codes_our_study[["ese_reuma"]][["CODESE"]] <- c("006", "045", "054")
+concept_set_codes_our_study[["ese_gastro"]][["CODESE"]] <- c("009")
+concept_set_codes_our_study[["ese_altra_cronica"]][["CODESE"]] <- c("Q001", "0A02", "0B02", "0C02", "003", "005", "006", "007", "008", "009", "011", "012", "013", "014", "016", "017", "018", "019", "020", "021", "022", "023", "024", "025", "026", "027", "028", "029", "030", "0A31", "0031", "032", "035", "036", "037", "038", "039", " 041", "042", "044", "045", "046", "048", "049", "050", "051", "052", "053", "054", "055", "056", "057", "059", "060", "061", "062", "063", "064", "065", "066", "067")
+

@@ -1,7 +1,7 @@
 # #set dates
 
-study_start_date <-  ymd(20180101)
-study_end_date <- ymd(20240331)
+study_start_date <-  ymd(20150101)
+study_end_date <- ymd(20251231)
 
 baselinedate_components <- ymd(20190101)
 
