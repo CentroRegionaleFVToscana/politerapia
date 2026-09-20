@@ -163,7 +163,7 @@ medenriched <- medenriched[,..tokeep]
 
 processing <- merge(processing, medenriched, by = "person_id", all.x = T)
 
-processing[ , (thissel) := fifelse( sel == 1 | is.na(get(thissel)), 1, 0) ]
+processing[ , (thissel) := fifelse( sel == 1 | is.na(get(thissel)), 1, get(thissel)) ]
 
 processing[ , sel := fifelse(sel == 1 | get(thissel) == 1 , 1, 0) ]
 
