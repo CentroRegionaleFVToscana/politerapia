@@ -88,7 +88,7 @@ row_header_1 <- c(row_header_1, "Soggetti con un periodo di osservazione nel 202
 j <- descriptive_N_perc(j, "sel_no_obs_periods_")
 
 # row 4
-row_header_1 <- c(row_header_1, "Soggetti con un periodo di osservazione che comprende la data indice 31/12/", year)
+row_header_1 <- c(row_header_1, paste0("Soggetti con un periodo di osservazione che comprende la data indice 31/12/", year))
 j <- descriptive_N_perc(j, "sel_obs_period_not_overlapped_study_period_")
 
 # row 5

@@ -85,6 +85,6 @@ data[, year:=year_p]
 
 
 # save
-saveRDS(data, file = paste0(thisdir, "/", namedataset,".rds"))
+saveRDS(data, file = paste0(thisdir, "/", namedataset,"_",year_p,".rds"))
 
 

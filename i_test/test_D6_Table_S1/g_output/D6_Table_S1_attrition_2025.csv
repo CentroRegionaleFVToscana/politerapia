@@ -1,0 +1,10 @@
+row_header,5000
+Soggetti con un farmaco tra il 2023 e il 2025 e in anagrafe almeno un giorno tra il 2023 e il 2025 (istanza),5000
+Soggetti con data di nascita e sesso compilati e validi,"4.006 (80,1%)"
+Soggetti con un periodo di osservazione nel 2025,"4.059 (81,2%)"
+Soggetti con un periodo di osservazione che comprende la data indice 31/12/2025,"3.961 (79,2%)"
+Soggetti di età >= 40 anni alla data indice,"4.002 (80,0%)"
+Soggetti con almeno 3 anni di osservazione disponibili prima della data indice,"4.047 (80,9%)"
+Soggetti con ASL registrata alla data indice,"3.999 (80,0%)"
+Soggetti politrattati,"4.001 (80,0%)"
+Totale soggetti inclusi nello studio,"1.075 (21,5%)"
