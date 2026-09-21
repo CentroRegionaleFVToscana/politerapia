@@ -1,7 +1,6 @@
 # #set directory with test data
 
 dirtest <- file.path(thisdir,"i_test")
-dircodelist <- file.path(thisdir,"p_parameters","archive_parameters")
 
 batch_size_countprevalence <- 20000000
 
@@ -12,31 +11,12 @@ set_and_create_dir <- function(x) {
 }
 
 # # set other directories
-# diroutput <- set_and_create_dir("/g_output/")
-dirtemp <- set_and_create_dir("/g_intermediate/")
-# dirconceptsets <- set_and_create_dir("/g_intermediate/conceptset_datasets/")
-# # diritemsets <- set_and_create_dir("/g_intermediate/itemset_datasets/")
-# # dirpromptsets <- set_and_create_dir("/g_intermediate/promptset_datasets/")
-# direxp <- set_and_create_dir("/g_export/")
-# dirD6 <- set_and_create_dir("/g_export/Formatted tables/")
-# dirfig <- set_and_create_dir("/g_export/Figures/")
-# dirmacro <- set_and_create_dir(paste0(thisdir,"/p_macro/"))
-# dirpargen <- set_and_create_dir("/g_parameters/")
-# # direvents <- set_and_create_dir("/g_intermediate/events/")
-# # dircomponents <- set_and_create_dir("/g_intermediate/components/")
-# # dirTD <- set_and_create_dir("/g_intermediate/TD/")
-
 
 diroutput <- set_and_create_dir(paste0(dirinput,"/g_output/"))
 dirtemp <- set_and_create_dir(paste0(dirinput,"/g_intermediate/"))
-dirconceptsets <- set_and_create_dir(paste0(dirinput,"/g_intermediate/conceptset_datasets/"))
-# diritemsets <- set_and_create_dir("/g_intermediate/itemset_datasets/")
-# dirpromptsets <- set_and_create_dir("/g_intermediate/promptset_datasets/")
 dirpargen <- set_and_create_dir(paste0(dirinput,"/g_parameters/"))
-# direvents <- set_and_create_dir("/g_intermediate/events/")
-# dircomponents <- set_and_create_dir("/g_intermediate/components/")
-# dirTD <- set_and_create_dir("/g_intermediate/TD/")
 
+dirarchive <- paste0(thisdir,"/p_parameters/archive_parameters/")
 dirmacro <- paste0(thisdir,"/p_macro/")
 direxp <- paste0(thisdir,"/g_export/")
 dir.create(direxp, showWarnings = F)

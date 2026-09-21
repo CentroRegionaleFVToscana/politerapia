@@ -16,7 +16,7 @@ if (TEST){
   thisdiroutput <- dirtemp
 }
 
-i <- 2025
+i <- year_p
 
 index_date <- ymd(paste0(i, "1231"))
 

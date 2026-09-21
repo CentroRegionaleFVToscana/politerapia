@@ -18,7 +18,7 @@ if (TEST){
 
 # load data
 
-year <- 2025
+year <- year_p
 
 # D3_selezione_coorte <- read.csv(file = paste0(thisdirinput, "/D3_selezione_coorte_dummy.csv"), sep = ";")
 
