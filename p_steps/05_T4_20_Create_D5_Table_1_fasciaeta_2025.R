@@ -75,7 +75,7 @@ for (j in fasce_eta) {
   
   for (k in 1:5) {
     
-    D5_nocov[, paste0("farmaco_piu_utilizzato_",k, "_p"):=round(get(paste0("farmaco_piu_utilizzato_",k, "_N"))/N,3)]
+    D5_nocov[, paste0("farmaco_piu_utilizzato_",k, "_p"):=round(get(paste0("farmaco_piu_utilizzato_",k, "_N"))/N,3)*100]
     
   }
 
