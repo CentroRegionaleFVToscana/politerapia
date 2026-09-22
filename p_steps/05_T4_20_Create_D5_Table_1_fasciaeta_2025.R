@@ -26,16 +26,26 @@ data <- readRDS(file = paste0(thisdirinput, "/D3_coorte_con_caratterizzazione_",
 data <- as.data.table(data)
 
 atc <- unique(unlist(strsplit(data[,atc_5_almeno_3],"_")))
-data[,(atc):=lapply(atc,function(x) as.integer(grepl(paste0("(^|_)", x, "(_|$)"),data[,atc_5_almeno_3])))]
+# data[,(atc):=lapply(atc,function(x) as.integer(grepl(paste0("(^|_)", x, "(_|$)"),data[,atc_5_almeno_3])))]
+
+atc_long <- data[,.(person_id, atc_5_almeno_3)]
+atc_long <- atc_long[, .(atc = unlist(strsplit(atc_5_almeno_3, " ", fixed = TRUE))), by = person_id]
+
+
 
 # store names of the five drugs (V level) most frequently dispensed
 variable_names_full <- NULL
 
-
+j <- fasce_eta[1]
 for (j in fasce_eta) {
 
+  dataj <- copy(data)[fasciaeta == j,]
+  toadd <- copy(data)[fasciaeta == j,]
+  toadd <- toadd[, asl := "Tutte"]
+  dataj <- rbind(dataj, toadd)
+  
   # Create D5 with sociodemographic characteristics
-  D5_nocov <- data[fasciaeta==j, .(
+  D5_nocov <- dataj[, .(
                 N          = .N,
                 genere_F_N = sum(genere=="F"),
                 genere_F_p = round(sum(genere=="F")/.N,3)*100),
@@ -43,30 +53,46 @@ for (j in fasce_eta) {
                 .(asl)]
   
   
-  # extract 5 most frequent ATC V level
-  distr <- data.frame(N=1)
+  # extract 5 most frequent ATC V level in this age band
   
-  for (k in atc) {
-    
-    tmp <- data.frame(sum(data[fasciaeta==j, get(k)==TRUE]))
-    
-    colnames(tmp) <- k
-    
-    distr <- cbind(distr, tmp)
-    
-  }
+  temp <- merge(atc_long,dataj[,.(person_id, asl)], all = F)
+  temp <- temp[, .N, by = c("atc","asl")]
+  setorder(temp, asl, - N)
+  temp[, ord := seq(.N), by = asl]
+  temp <- temp[ord <= 5, ]
   
-  distr <- as.data.table(distr)
+  wide <- dcast(temp, 
+                asl ~ ord, 
+                value.var = c("atc", "N")
+                )
   
-  distr_l <- melt(distr[, N:=NULL],
-                  measure.vars = names(distr),
-                  variable.name = "variable",
-                  value.name = "atc")
+  setnames(wide, sub("^atc_(\\d+)$", "farmaco_piu_utilizzato_\\1", names(wide)))
+  setnames(wide, sub("^N_(\\d+)$", "farmaco_piu_utilizzato_\\1_N", names(wide)))
   
-  distr_l <- setorder(distr_l, -atc)
-  
-  distr_l_sel <- distr_l[c(1:5) ,]
-  
+  # 
+  # distr <- data.frame(N=1)
+  # 
+  # for (k in atc) {
+  #   
+  #   tmp <- data.frame(sum(data[fasciaeta==j, get(k)==TRUE]))
+  #   
+  #   colnames(tmp) <- k
+  #   
+  #   distr <- cbind(distr, tmp)
+  #   
+  # }
+  # 
+  # distr <- as.data.table(distr)
+  # 
+  # distr_l <- melt(distr[, N:=NULL],
+  #                 measure.vars = names(distr),
+  #                 variable.name = "variable",
+  #                 value.name = "atc")
+  # 
+  # distr_l <- setorder(distr_l, -atc)
+  # 
+  # distr_l_sel <- distr_l[c(1:5) ,]
+  # 
   variable_names <- distr_l_sel[, as.character(variable)]
   
 
@@ -79,7 +105,7 @@ for (j in fasce_eta) {
 
   for (i in covariates_full) {
 
-    tmp <- data[fasciaeta==j, .(
+    tmp <- dataj[, .(
                 N = .N,
                 tmp_N = sum(get(i)==1),
                 tmp_p = round(sum(get(i)==1)/.N,3)*100),

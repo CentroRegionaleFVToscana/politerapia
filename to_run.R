@@ -39,7 +39,7 @@ source(paste0(thisdir,"/p_parameters/6_parameters_study.R"))
 # source(paste0(thisdir,"/p_steps/02_T2_20_create_D3_RSA_ADI.R"))
 # source(paste0(thisdir,"/p_steps/02_T2_30_create_D3_selezione_coorte.R"))
 
-source(paste0(thisdir,"/p_steps/02_T2_40_create_D3_coorte_con_caratterizzazione.R"))
+# source(paste0(thisdir,"/p_steps/02_T2_40_create_D3_coorte_con_caratterizzazione.R"))
 
 
 
