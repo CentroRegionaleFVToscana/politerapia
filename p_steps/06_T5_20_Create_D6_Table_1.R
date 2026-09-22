@@ -64,6 +64,27 @@ descriptive_N_perc <- function(j, covar) {
   return(j)
 }
 
+
+descriptive_N_perc_variante <- function(j, covar) {
+  
+  j <- j + 1
+  varN   <- paste0(covar, "N")
+  varP   <- paste0(covar, "p")
+  varATC <- sub("_[^_]*$", "", covar)  
+  
+  tab_nice[, cell := paste0(
+    get(varATC), " ",
+    formatC(get(varN), format = "f", digits = 0, big.mark = ".",
+            decimal.mark = ","), " (",
+    formatC(get(varP), format = "f", digits = 1, big.mark = ".",
+            decimal.mark = ","), "%)"
+  )]
+  setnames(tab_nice, "cell", paste0("cell_", j))
+  return(j)
+}
+
+
+
 descriptive_median_q1q3 <- function(j, covar) {
 
   j <- j + 1
@@ -114,8 +135,8 @@ for (k in fasce_eta) {
   j <- add_empty_row(j)
 
   # row 6
-  row_header_1 <- c(row_header_1, variable_names_full[[k]][1])
-  j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][1], "_"))
+  row_header_1 <- c(row_header_1, "1")
+  j <- descriptive_N_perc_variante(j, "farmaco_più_utilizzato_1_")
 
   # row 7
   row_header_1 <- c(row_header_1, variable_names_full[[k]][2])
