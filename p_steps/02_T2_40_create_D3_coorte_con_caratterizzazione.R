@@ -12,7 +12,7 @@ if (TEST){
   dir.create(thisdiroutput, showWarnings = F)
 }else{
   thisdirinput <- dirtemp
-  thisdirinput <- dirinput
+  thisdirinputcsv <- dirinput
   thisdiroutput <- dirtemp
 }
 
