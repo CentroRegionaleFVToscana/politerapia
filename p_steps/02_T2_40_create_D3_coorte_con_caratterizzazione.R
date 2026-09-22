@@ -1,6 +1,6 @@
 # author: Rosa Gini
 
-# v 1.0 16 Sep 2026
+# v 1.0 22 Sep 2026
 
 #########################################
 
@@ -42,6 +42,11 @@ processing <- readRDS(file.path(thisdirinput, paste0("D3_coorte_", i, ".rds")))
 
  index_date <- ymd(paste0(i, "1231"))
 
+ # select medicines
+ 
+ medenriched <- merge(processing[,.(person_id)], medicines[ DATE >= index_date - 365 & DATE <= index_date,], by = "person_id", all = F)
+ 
+ 
 # age
 
 processing[, age := age_fast(birth_date, index_date)]
@@ -101,7 +106,8 @@ for (component in component_variables) {
 
 # iperpoliterapia	iperpoliterapia	binary	1 = “10 farmaci ATC IV nello stesso mese per 3 mesi su 12” 0 = altrimenti
 
-medenriched <- merge(processing[,.(person_id)], medicines[ DATE >= index_date - 365 & DATE <= index_date,], by = "person_id", all = F)
+
+temp <- medenriched
 
 temp[, month := month(DATE)]
 temp[, atc4 := substr(atc, 1,5)]
@@ -112,7 +118,7 @@ temp[, poly := fifelse(N >= 10, 1, 0)]
 temp <- temp[, .(months_poly = sum(poly)), 
              by = c("person_id")
 ]
-temp[, iperpoliterapia := fifelse(months_poly >= 3, 0, 1)]
+temp[, iperpoliterapia := fifelse(months_poly >= 3, 1, 0)]
 
 tokeep <- c("person_id", "iperpoliterapia")
 
@@ -126,7 +132,11 @@ processing[ is.na(iperpoliterapia), iperpoliterapia := 0 ]
 
 # atc_5_almeno_3	lista degli ATC di 5 livello che sono stati dispensati 3+ volte durante l’anno	strings	
 
-medenriched <- medenriched[, .N, by = c("person_id", "atc")]
+temp <- medenriched[, .N, by = c("person_id", "atc")]
+temp <- temp[N >= 3,]
+temp[, N := NULL]
+temp <- temp[!is.na(atc) & atc != "", ]
+temp <- temp[, .(atc_5_almeno_3 = paste(sort(unique(atc)), collapse = " ")), by = person_id]
 
 # rsa_adi
 
@@ -141,6 +151,8 @@ processing <- rsa[
     end_d >= ref_date
   )  
 ]
+
+setnames(processing, "RSA", "rsa_adi")
 
 processing[, c("start_d", "end_d") := NULL]  
 processing[is.na(rsa_adi), rsa_adi := 0]
