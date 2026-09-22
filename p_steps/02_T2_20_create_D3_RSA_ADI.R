@@ -9,7 +9,7 @@
 #########################################
 
 if (TEST){
-  testname <- "test_D3_RSA_AD"
+  testname <- "test_D3_RSA_ADI"
   thisdirinput <- file.path(dirtest,testname)
   thisdiroutput <- file.path(dirtest,testname,"g_output")
   dir.create(thisdiroutput, showWarnings = F)
@@ -60,7 +60,7 @@ tokeep <- c("person_id", "start_d", "end_d", "rsa_adi")
 
 processing <- processing[, ..tokeep]
 
-nameoutputfile <- paste0("D3_RSA_AD.rds")
+nameoutputfile <- paste0("D3_RSA_ADI.rds")
 
 saveRDS(processing, file = file.path(thisdiroutput, nameoutputfile))
 
