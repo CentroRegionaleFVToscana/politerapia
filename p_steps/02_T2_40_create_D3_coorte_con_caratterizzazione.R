@@ -152,7 +152,7 @@ processing <- rsa[
   )  
 ]
 
-setnames(processing, "RSA", "rsa_adi")
+# setnames(processing, "RSA", "rsa_adi")
 
 processing[, c("start_d", "end_d") := NULL]  
 processing[is.na(rsa_adi), rsa_adi := 0]

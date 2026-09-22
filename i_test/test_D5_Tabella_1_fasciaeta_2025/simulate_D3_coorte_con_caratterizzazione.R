@@ -19,7 +19,7 @@ library(truncnorm)
 
 
 # name of the dataset to be generated
-namedataset <- "D3_coorte_con_caratterizzazione"
+namedataset <- "D3_coorte_con_caratterizzazione_2025"
 
 vocabulary_ATC <- c("A10BK", "A10BJ", "A10BX16", "A10BH", "A10BD24", "A10BD21", "A10BD19","A10BD13", "A10BD11", "A10BD10", "A10BD07", "A10BD08","A10BD09","A10AE56", "A10AE54", "A10BD16", "A10BD15", "A10BD20", "A10BD23")
 

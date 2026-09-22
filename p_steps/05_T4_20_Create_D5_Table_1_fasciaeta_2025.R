@@ -16,12 +16,13 @@ if (TEST){
   thisdiroutput <- dirtemp
 }
 
+year <- year_p
 
 # load data
 
 # dummy data
 # data <- read.csv(paste0(thisdirinput, "/D3_coorte_con_caratterizzazione_dummy.csv"), sep = ";")
-data <- readRDS(file = paste0(thisdirinput, "/D3_coorte_con_caratterizzazione.rds"))
+data <- readRDS(file = paste0(thisdirinput, "/D3_coorte_con_caratterizzazione_", year, ".rds"))
 data <- as.data.table(data)
 
 atc <- unique(unlist(strsplit(data[,atc_5_almeno_3],"_")))
@@ -110,8 +111,8 @@ for (j in fasce_eta) {
 # save
 for (j in fasce_eta) {
 
-  saveRDS(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Tabella_1_caratterizzazione_2025_", j, ".rds"))
-  write.csv(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Tabella_1_caratterizzazione_2025_", j, ".csv"))
+  saveRDS(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Tabella_1_caratterizzazione_",year, "_", j, ".rds"))
+  write.csv(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Tabella_1_caratterizzazione_",year,"_", j, ".csv"))
 
 }
 
