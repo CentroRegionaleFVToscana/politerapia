@@ -8,10 +8,12 @@ if (TEST){
   testname <- "test_D5_Tabella_2_asl_2025"
   thisdirinput <- file.path(dirtest,testname)
   thisdiroutput <- file.path(dirtest,testname,"g_output")
+  thisdirexp <- thisdiroutput
   dir.create(thisdiroutput, showWarnings = F)
 }else{
   thisdirinput <- dirtemp
   thisdiroutput <- dirtemp
+  thisdirexp <- direxp
 }
 
 
@@ -99,7 +101,7 @@ for (j in asl) {
 for (j in asl) {
 
   saveRDS(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Table_2_combinazioni_farmaci_",year,"_", j, ".rds"))
-  write.csv(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Table_2_combinazioni_farmaci_",year,"_", j, ".csv"))
+  write.csv(get(paste0("D5_", j)), file = paste0(thisdirexp, "/D5_Table_2_combinazioni_farmaci_",year,"_", j, ".csv"))
 
 }
 

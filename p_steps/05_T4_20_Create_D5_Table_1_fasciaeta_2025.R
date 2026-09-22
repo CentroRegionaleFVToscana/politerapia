@@ -10,10 +10,12 @@ if (TEST){
   testname <- "test_D5_Tabella_1_fasciaeta_2025"
   thisdirinput <- file.path(dirtest,testname)
   thisdiroutput <- file.path(dirtest,testname,"g_output")
+  thisdirexp <- thisdiroutput
   dir.create(thisdiroutput, showWarnings = F)
 }else{
   thisdirinput <- dirtemp
   thisdiroutput <- dirtemp
+  thisdirexp <- direxp
 }
 
 year <- year_p
@@ -125,7 +127,7 @@ for (j in fasce_eta) {
 for (j in fasce_eta) {
 
   saveRDS(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Tabella_1_caratterizzazione_",year, "_", j, ".rds"))
-  write.csv(get(paste0("D5_", j)), file = paste0(thisdiroutput, "/D5_Tabella_1_caratterizzazione_",year,"_", j, ".csv"))
+  write.csv(get(paste0("D5_", j)), file = paste0(thisdirexp, "/D5_Tabella_1_caratterizzazione_",year,"_", j, ".csv"))
 
 }
 
