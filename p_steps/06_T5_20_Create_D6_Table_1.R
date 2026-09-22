@@ -49,6 +49,7 @@ add_empty_row <- function(j){
   return(j)
 }
 
+
 descriptive_N_perc <- function(j, covar) {
 
   j <- j + 1
@@ -136,24 +137,23 @@ for (k in fasce_eta) {
 
   # row 6
   row_header_1 <- c(row_header_1, "1")
-  j <- descriptive_N_perc_variante(j, "farmaco_più_utilizzato_1_")
+  j <- descriptive_N_perc_variante(j, "farmaco_piu_utilizzato_1_")
 
   # row 7
-  row_header_1 <- c(row_header_1, variable_names_full[[k]][2])
-  j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][2], "_"))
+  row_header_1 <- c(row_header_1, "2")
+  j <- descriptive_N_perc_variante(j, "farmaco_piu_utilizzato_2_")
   
   # row 8
-  row_header_1 <- c(row_header_1, variable_names_full[[k]][3])
-  j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][3], "_"))
+  row_header_1 <- c(row_header_1, "3")
+  j <- descriptive_N_perc_variante(j, "farmaco_piu_utilizzato_3_")
   
   # row 9
-  row_header_1 <- c(row_header_1, variable_names_full[[k]][4])
-  j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][4], "_"))
+  row_header_1 <- c(row_header_1, "4")
+  j <- descriptive_N_perc_variante(j, "farmaco_piu_utilizzato_4_")
   
   # row 10
-  row_header_1 <- c(row_header_1, variable_names_full[[k]][5])
-  j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][5], "_"))
-
+  row_header_1 <- c(row_header_1, "5")
+  j <- descriptive_N_perc_variante(j, "farmaco_piu_utilizzato_5_")
   # row 11
   row_header_1 <- c(row_header_1, "Contesto assistenziale")
   j <- add_empty_row(j)
@@ -282,3 +282,4 @@ for (k in fasce_eta) {
   print(doc, target = file.path(thisdiroutput, paste0(nameoutput,"_", k,".docx")))
 
 }
+
