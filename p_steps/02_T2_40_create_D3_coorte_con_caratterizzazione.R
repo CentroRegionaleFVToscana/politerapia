@@ -53,7 +53,7 @@ processing[, age := age_fast(birth_date, index_date)]
 
 # ageband
 
-processing[, ageband := fcase(
+processing[, fasciaeta := fcase(
   age >= 40 & age <= 64, "40-64",
   age >= 65 & age <= 84, "65-84",
   age >= 85, "85+"
@@ -62,7 +62,13 @@ processing[, ageband := fcase(
 
 # genere
 
-processing[, genere := gender]
+setnames(processing, "gender", "genere")
+
+# asl
+
+setnames(processing, "ASL", "asl")
+
+# componenti
 
 component <- "ese_cardio"
 for (component in component_variables) {

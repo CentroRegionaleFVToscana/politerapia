@@ -55,7 +55,7 @@ for (j in fasce_eta) {
   
   # extract 5 most frequent ATC V level in this age band
 
-  temp <- merge(atc_long, dataj[,.(person_id, asl)], by = "person_id", all = F)
+  temp <- merge(atc_long, dataj[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
   
   temp <- temp[, .N, by = c("atc","asl")]
   setorder(temp, asl, - N)
