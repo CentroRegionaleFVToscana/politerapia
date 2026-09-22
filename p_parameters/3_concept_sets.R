@@ -68,6 +68,10 @@ for (concept_id in concept_sets_of_our_study_diagnosis) {
   concept_set_domains[[concept_id]]="Diagnosis"
 }
 
+for (concept_id in concept_sets_of_our_study_procedures) {
+  concept_set_domains[[concept_id]]="Procedures"
+}
+
 
 # -concept_set_codes_our_study- is a nested list, with 3 levels: foreach concept set, for each coding system of its data domain, the list of codes is recorded
 
