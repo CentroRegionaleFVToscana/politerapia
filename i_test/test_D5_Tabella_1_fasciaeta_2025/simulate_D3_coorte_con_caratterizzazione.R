@@ -46,7 +46,7 @@ data[, genere := ifelse(genere == "1","M","F")]
 data[, fasciaeta := as.character(sample(c("40-64", "65-84", "85+"), Npersons, replace = TRUE))]
 
 # atc_5_almeno_3
-data[, atc_5_almeno_3:=sapply(sample(3:10, .N, replace=T), function(n) paste(sample(vocabulary_ATC, n, replace = T), collapse = "_") )]
+data[, atc_5_almeno_3:=sapply(sample(3:10, .N, replace=T), function(n) paste(sample(vocabulary_ATC, n, replace = T), collapse = " ") )]
 
 # covariates at t0: binary
 covariates_binary <- c("iperpoliterapia", "rsa_adi", "cardiocircolatoria",
