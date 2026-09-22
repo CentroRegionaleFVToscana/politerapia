@@ -138,6 +138,8 @@ temp[, N := NULL]
 temp <- temp[!is.na(atc) & atc != "", ]
 temp <- temp[, .(atc_5_almeno_3 = paste(sort(unique(atc)), collapse = " ")), by = person_id]
 
+processing <- merge(processing, temp, by = "person_id", all.x = T)
+
 # rsa_adi
 
 
