@@ -34,9 +34,9 @@ atc_long <- atc_long[, .(atc = unlist(strsplit(atc_5_almeno_3, " ", fixed = TRUE
 
 
 # store names of the five drugs (V level) most frequently dispensed
-variable_names_full <- NULL
+# variable_names_full <- NULL
 
-j <- fasce_eta[1]
+
 for (j in fasce_eta) {
 
   dataj <- copy(data)[fasciaeta == j,]
@@ -54,8 +54,9 @@ for (j in fasce_eta) {
   
   
   # extract 5 most frequent ATC V level in this age band
+
+  temp <- merge(atc_long, dataj[,.(person_id, asl)], by = "person_id", all = F)
   
-  temp <- merge(atc_long,dataj[,.(person_id, asl)], all = F)
   temp <- temp[, .N, by = c("atc","asl")]
   setorder(temp, asl, - N)
   temp[, ord := seq(.N), by = asl]
@@ -69,41 +70,27 @@ for (j in fasce_eta) {
   setnames(wide, sub("^atc_(\\d+)$", "farmaco_piu_utilizzato_\\1", names(wide)))
   setnames(wide, sub("^N_(\\d+)$", "farmaco_piu_utilizzato_\\1_N", names(wide)))
   
-  # 
-  # distr <- data.frame(N=1)
-  # 
-  # for (k in atc) {
-  #   
-  #   tmp <- data.frame(sum(data[fasciaeta==j, get(k)==TRUE]))
-  #   
-  #   colnames(tmp) <- k
-  #   
-  #   distr <- cbind(distr, tmp)
-  #   
-  # }
-  # 
-  # distr <- as.data.table(distr)
-  # 
-  # distr_l <- melt(distr[, N:=NULL],
-  #                 measure.vars = names(distr),
-  #                 variable.name = "variable",
-  #                 value.name = "atc")
-  # 
-  # distr_l <- setorder(distr_l, -atc)
-  # 
-  # distr_l_sel <- distr_l[c(1:5) ,]
-  # 
-  variable_names <- distr_l_sel[, as.character(variable)]
+
+  D5_nocov <- merge(D5_nocov, wide, by = "asl")
+  
+  for (k in 1:5) {
+    
+    D5_nocov[, paste0("farmaco_piu_utilizzato_",k, "_p"):=round(get(paste0("farmaco_piu_utilizzato_",k, "_N"))/N,3)]
+    
+  }
+
+  
+  # variable_names <- distr_l_sel[, as.character(variable)]
   
 
   # create D5 with binary covariates
   covariates_binary <- c("iperpoliterapia", "rsa_adi", "cardiocircolatoria", "reumatologica", "gastroenterologica", "esenzione_qualsiasi")
 
-  covariates_full <- c(covariates_binary, variable_names)
+  # covariates_full <- c(covariates_binary, variable_names)
 
   D5_cov <- NULL
 
-  for (i in covariates_full) {
+  for (i in covariates_binary) {
 
     tmp <- dataj[, .(
                 N = .N,
@@ -130,7 +117,7 @@ for (j in fasce_eta) {
 
   assign(paste0("D5_",j), D5)
   
-  variable_names_full[[j]] <- variable_names
+  # variable_names_full[[j]] <- variable_names
 
 }
 
