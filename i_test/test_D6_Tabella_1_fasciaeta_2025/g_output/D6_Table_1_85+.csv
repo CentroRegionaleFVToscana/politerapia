@@ -1,18 +1,18 @@
-row_header,CE,NO,SE
-ASL,CE,NO,SE
-Totale,574,543,549
-"Donne, n (%)","289 (50,3%)","264 (48,6%)","256 (46,6%)"
-Pazienti in iper-politerapia (≥10 farmaci ATC IV nello stesso mese per 3 mesi su 12),"51 (8,9%)","50 (9,2%)","57 (10,4%)"
-Principi attivi più utilizzati (ATC V livello dispensati ≥ 3 volte in un anno),"","",""
-A10BK,"153 (26,7%)","181 (33,3%)","190 (34,6%)"
-A10BD13,"172 (30,0%)","189 (34,8%)","160 (29,1%)"
-A10BJ,"183 (31,9%)","152 (28,0%)","164 (29,9%)"
-A10BD09,"162 (28,2%)","164 (30,2%)","173 (31,5%)"
-A10AE54,"159 (27,7%)","157 (28,9%)","179 (32,6%)"
-Contesto assistenziale,"","",""
-RSA e/o ADI (≥1 giorno durate l’anno),"265 (46,2%)","257 (47,3%)","268 (48,8%)"
-Esenzione per patologia cronica,"","",""
-Cardiocircolatoria,"403 (70,2%)","395 (72,7%)","400 (72,9%)"
-Reumatologica,"382 (66,6%)","377 (69,4%)","374 (68,1%)"
-Gastroenterologica,"131 (22,8%)","128 (23,6%)","136 (24,8%)"
-≥1 esenzione per qualsiasi malattia cronica,"333 (58,0%)","315 (58,0%)","309 (56,3%)"
+row_header,CE,NO,SE,Tutte
+ASL,CE,NO,SE,Tutte
+Totale,574,541,551,1666
+"Donne, n (%)","264 (46,0%)","259 (47,9%)","286 (51,9%)","809 (48,6%)"
+Pazienti in iper-politerapia (≥10 farmaci ATC IV nello stesso mese per 3 mesi su 12),"40 (7,0%)","51 (9,4%)","42 (7,6%)","133 (8,0%)"
+Principi attivi più utilizzati (ATC V livello dispensati ≥ 3 volte in un anno),"","","",""
+1,"A10BH 221 (0,4%)","A10BD08 215 (0,4%)","A10BD11 208 (0,4%)","A10BH 617 (0,4%)"
+2,"A10BD21 220 (0,4%)","A10BJ 204 (0,4%)","A10BD10 208 (0,4%)","A10BD16 604 (0,4%)"
+3,"A10AE54 212 (0,4%)","A10BD15 204 (0,4%)","A10BD20 207 (0,4%)","A10BD11 593 (0,4%)"
+4,"A10BD16 204 (0,4%)","A10BD16 200 (0,4%)","A10BD09 203 (0,4%)","A10BD10 592 (0,4%)"
+5,"A10BJ 203 (0,4%)","A10BD10 198 (0,4%)","A10BH 202 (0,4%)","A10BD21 589 (0,4%)"
+Contesto assistenziale,"","","",""
+RSA e/o ADI (≥1 giorno durate l’anno),"1 (0,2%)","8 (1,5%)","4 (0,7%)","13 (0,8%)"
+Esenzione per patologia cronica,"","","",""
+Cardiocircolatoria,"346 (60,3%)","339 (62,7%)","338 (61,3%)","1.023 (61,4%)"
+Reumatologica,"48 (8,4%)","61 (11,3%)","42 (7,6%)","151 (9,1%)"
+Gastroenterologica,"373 (65,0%)","372 (68,8%)","343 (62,3%)","1.088 (65,3%)"
+≥1 esenzione per qualsiasi malattia cronica,"252 (43,9%)","250 (46,2%)","242 (43,9%)","744 (44,7%)"
