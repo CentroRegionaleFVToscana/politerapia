@@ -21,7 +21,20 @@ library(truncnorm)
 # name of the dataset to be generated
 namedataset <- "D3_coorte_con_caratterizzazione"
 
-vocabulary_ATC <- c("A10BK", "A10BJ", "A10BX16", "A10BH", "A10BD24", "A10BD21", "A10BD19","A10BD13", "A10BD11", "A10BD10", "A10BD07", "A10BD08","A10BD09","A10AE56", "A10AE54", "A10BD16", "A10BD15", "A10BD20", "A10BD23")
+vocabulary_ATC <- c("A10BK02", "A10BJ01", "A10BX16", "A10BH02", "A10BD24", 
+                    "A10BD21", "A10BD19","A10BD13", "A10BD11", "A10BD10", 
+                    "A10BD07", "A10BD08","A10BD09","A10AE56", "A10AE54", 
+                    "A10BD16", "A10BD15", "A10BD20", "A10BD23",
+                    
+                    "B10BK02", "B10BJ01", "B10BX16", "B10BH02", "B10BD24", 
+                    "B10BD21", "B10BD19","B10BD13", "B10BD11", "B10BD10", 
+                    "B10BD07", "B10BD08","B10BD09","B10BE56", "B10AE54", 
+                    "B10BD16", "B10BD15", "B10BD20", "B10BD23",
+                    
+                    "C10BK02", "C10BJ01", "C10BX16", "C10BH02", "C10BD24", 
+                    "C10BD21", "C10BD19","C10BD13", "C10BD11", "C10BD10", 
+                    "C10BD07", "C10BD08","C10BD09","C10CE56", "C10CE54", 
+                    "C10BD16", "C10BD15", "C10BD20", "C10BD23")
 
 # set number of persons
 Npersons <- 5000
