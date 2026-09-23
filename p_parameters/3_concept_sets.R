@@ -5,7 +5,7 @@ concept_sets_of_our_study_drugs <- c()
 
 # "med_iperten", "med_cardioisc_angi", "med_dislip", "med_diab", "med_RENDIS_Alg1_1", "med_RENDIS_Alg1_2", "med_RENDIS_Alg1_3", "med_RENDIS_Alg2", "med_cortic", "med_antiang", "med_antitromb",  "med_bifos"
 
-concept_sets_of_our_study_diagnosis <- c("ese_cardio","ese_reuma", "ese_gastro", "ese_altra_cronica", "dia_reuma", "dia_IHD", "dia_AMI", "dia_STROKE", "dia_TIA", "dia_aop", "dia_ateros", "dia_organdamage", "dia_dyslipidemia", "dia_obesity", "dia_hypertension", "dia_smoking", "dia_HF", "dia_RENDIS")
+concept_sets_of_our_study_diagnosis <- c("ese_cardio","ese_reuma", "ese_gastro", "ese_altra_cronica", "dia_reuma", "dia_gastro", "dia_IHD", "dia_AMI", "dia_STROKE", "dia_TIA", "dia_aop", "dia_ateros", "dia_organdamage", "dia_dyslipidemia", "dia_obesity", "dia_hypertension", "dia_smoking", "dia_HF", "dia_RENDIS")
 
 concept_sets_of_our_study_procedures <- c("proc_bypass", "proc_angioplasty", "proc_carot")
 
@@ -37,6 +37,7 @@ name_codelist[["ese_reuma"]] <- "Esenzione per malattia reumatologica"
 name_codelist[["ese_gastro"]] <- "Esenzione per malarria gastroenterologica"
 name_codelist[["ese_altra_cronica"]] <- "Esenzione per altra malattia cronica"
 name_codelist[["dia_reuma"]] <- "Diagnosi di malattia reumatologica"
+name_codelist[["dia_gastro"]] <- "Diagnosi di malattia gastroenterologica"
 name_codelist[["dia_IHD"]] <- "Diagnoses contributing to the algorithm on IHD (Table 3 of the protocol)"
 name_codelist[["dia_AMI"]] <- "Diagnoses contributing to the algorithm on AMI (Table 3 of the protocol)"
 name_codelist[["dia_STROKE"]] <- "Diagnoses contributing to the algorithm on STROKE (Table 3 of the protocol)"
@@ -104,7 +105,7 @@ concept_set_codes_our_study[["ese_reuma"]][["CODESE"]] <- c("006", "045", "054",
 concept_set_codes_our_study[["ese_gastro"]][["CODESE"]] <- c("009")
 concept_set_codes_our_study[["ese_altra_cronica"]][["CODESE"]] <- c("Q001", "0A02", "0B02", "0C02", "003", "005", "006", "007", "008", "009", "011", "012", "013", "014", "016", "017", "018", "019", "020", "021", "022", "023", "024", "025", "026", "027", "028", "029", "030", "0A31", "0031", "032", "035", "036", "037", "038", "039", " 041", "042", "044", "045", "046", "048", "049", "050", "051", "052", "053", "054", "055", "056", "057", "059", "060", "061", "062", "063", "064", "065", "066", "067")
 concept_set_codes_our_study[["dia_reuma"]][["ICD9"]] <- c("714", "710", "711.1", "720.0", "720.1", "720.2", "720.8", "720.9", "696.0", "446", "725", "136.1", "555", "556")
-
+concept_set_codes_our_study[["dia_gastro"]][["ICD9"]] <- c("555","556")
 
 concept_set_codes_our_study[["dia_IHD"]][["ICD9"]] <- c("410","411","412","413","414")
 concept_set_codes_our_study[["dia_AMI"]][["ICD9"]] <- c("410")
