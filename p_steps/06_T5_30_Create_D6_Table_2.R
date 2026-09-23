@@ -26,15 +26,15 @@ if (TEST){
 
 # load
 
-for (j in asl) {
+#for (j in asl) {
   
-  D5 <- read.csv(paste0(thisdirinput, "D5_Table_2_combinazioni_farmaci_2025_", j, ".csv"))
+  D5 <- read.csv(paste0(thisdirinput, "/D5_Table_2_combinazioni_farmaci_2025.csv"))
   
   D5 <- as.data.table(D5)
   
-  assign(paste0("D5_Table_2_combinazioni_farmaci_2025_",j), D5)
+  #assign(paste0("D5_Table_2_combinazioni_farmaci_2025_",j), D5)
   
-}
+#}
 
 
 
@@ -49,12 +49,32 @@ add_empty_row <- function(j){
   return(j)
 }
 
+
 descriptive_N_perc <- function(j, covar) {
   
   j <- j + 1
   varN <- paste0(covar,"N")
   varP <- paste0(covar,"p")
   tab_nice[, cell := paste0(
+    formatC(get(varN), format = "f", digits = 0, big.mark = ".",
+            decimal.mark = ","), " (",
+    formatC(get(varP), format = "f", digits = 1, big.mark = ".",
+            decimal.mark = ","),"%)"
+  )]
+  setnames(tab_nice, "cell", paste0("cell_",j))
+  return(j)
+}
+
+
+descriptive_N_perc_variante <- function(j, covar) {
+  
+  j <- j + 1
+  varN <- paste0(covar,"N")
+  varP <- paste0(covar,"p")
+  varATCIV <- sub("_[^_]*$", "", covar)
+  
+  tab_nice[, cell := paste0(
+    get(varATCIV), " ",
     formatC(get(varN), format = "f", digits = 0, big.mark = ".",
             decimal.mark = ","), " (",
     formatC(get(varP), format = "f", digits = 1, big.mark = ".",
@@ -83,7 +103,7 @@ descriptive_median_q1q3 <- function(j, covar) {
 
 for (k in asl) {
   
-  tab_nice <- copy(get(paste0("D5_Table_2_combinazioni_farmaci_2025_", k)))
+  tab_nice <- copy(D5[asl == k])
   
   # row 0
   row_header_1 <- c()
@@ -108,51 +128,50 @@ for (k in asl) {
   # j <- add_empty_row(j)
   
   # row 5
-  row_header_1 <- c(row_header_1, variable_names_full[[k]][1])
-  j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][1], "_"))
+  row_header_1 <- c(row_header_1, "1")
+  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_1_")
   
   # row 6
-  row_header_1 <- c(row_header_1, variable_names_full[[k]][2])
-  j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][2], "_"))
+  row_header_1 <- c(row_header_1, "2")
+  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_2_")
   
   # row 7
-  row_header_1 <- c(row_header_1, variable_names_full[[k]][3])
-  j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][3], "_"))
+  row_header_1 <- c(row_header_1, "3")
+  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_3_")
   
   # row 8
-  row_header_1 <- c(row_header_1, variable_names_full[[k]][4])
-  j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][4], "_"))
+  row_header_1 <- c(row_header_1, "4")
+  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_4_")
   
   # row 9
-  row_header_1 <- c(row_header_1, variable_names_full[[k]][5])
-  j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][5], "_"))
+  row_header_1 <- c(row_header_1, "5")
+  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_5_")
   
   # row 10
-  row_header_1 <- c(row_header_1, variable_names_full[[k]][6])
-  j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][6], "_"))
+  row_header_1 <- c(row_header_1, "6")
+  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_6_")
   
   # row 11
-  if (length(variable_names_full[[k]])>=7){
-    row_header_1 <- c(row_header_1, variable_names_full[[k]][7])
-    j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][7], "_"))
-  }
+#  if (length(variable_names_full[[k]])>=7){
+#    row_header_1 <- c(row_header_1, variable_names_full[[k]][7])
+#    j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][7], "_"))
+#  }
 
   # row 12
-  if (length(variable_names_full[[k]])>=8){
-    row_header_1 <- c(row_header_1, variable_names_full[[k]][8])
-    j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][8], "_"))
-  }  
+  row_header_1 <- c(row_header_1, "7")
+  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_7_")
+
   # row 13
-  if (length(variable_names_full[[k]])>=9){
-    row_header_1 <- c(row_header_1, variable_names_full[[k]][9])
-    j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][9], "_"))
-  }  
+  row_header_1 <- c(row_header_1, "8")
+  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_8_")
   
   # row 14
-  if (length(variable_names_full[[k]])>=10){
-    row_header_1 <- c(row_header_1, variable_names_full[[k]][10])
-    j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][10], "_"))
-  }
+  row_header_1 <- c(row_header_1, "9")
+  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_9_")
+  
+  # row 15
+  row_header_1 <- c(row_header_1, "10")
+  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_10_")
   
   
   
@@ -252,3 +271,4 @@ for (k in asl) {
   print(doc, target = file.path(thisdiroutput, paste0(nameoutput,"_", k,".docx")))
   
 }
+
