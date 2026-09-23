@@ -6,6 +6,9 @@ asl <- c("CE", "NO", "SE")
 
 fasce_eta <- c("40-64", "65-84", "85+")
 
+esenzioni <- c("cardiocircolatoria", "reumatologica", "gastroenterologica",
+               "esenzione_qualsiasi")
+
 year_p <- "2025"
 
 var_selection <- c("sel_data_incomplete", 
