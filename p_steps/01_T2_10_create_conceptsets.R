@@ -48,16 +48,16 @@ CreateConceptSetDatasets(dataset = TheShinISS_CDM_tables,
                          extension = c("csv"))
 
 
-# CreateConceptSetDatasets(dataset = TheShinISS_CDM_tables,
-#                          codvar = TheShinISS_CDM_codvar,
-#                          datevar = TheShinISS_CDM_datevar,
-#                          dateformat = "YYYYmmdd",
-#                          rename_col = list(ID=ID,DATE=DATE),
-#                          concept_set_domains = concept_set_domains,
-#                          concept_set_codes =	concept_set_codes_our_study,
-#                          concept_set_names = concept_sets_of_our_study_procedures,
-#                          concept_set_codes_excl = concept_set_codes_our_study_excl,
-#                          dirinput = thisdirinput,
-#                          diroutput = thisdiroutput,
-#                          extension = c("csv"))
-# 
+CreateConceptSetDatasets(dataset = TheShinISS_CDM_tables,
+                         codvar = TheShinISS_CDM_codvar,
+                         datevar = TheShinISS_CDM_datevar,
+                         dateformat = "YYYYmmdd",
+                         rename_col = list(ID=ID,DATE=DATE),
+                         concept_set_domains = concept_set_domains,
+                         concept_set_codes =	concept_set_codes_our_study,
+                         concept_set_names = concept_sets_of_our_study_procedures,
+                         concept_set_codes_excl = concept_set_codes_our_study_excl,
+                         dirinput = thisdirinput,
+                         diroutput = thisdiroutput,
+                         extension = c("csv"))
+
