@@ -14,7 +14,7 @@ print('CREATE D6_Table_4')
 # assign directories
 
 if (TEST){ 
-  testname <- "test_D6_Tabella_1_fasciaeta_2025"
+  testname <- "test_D6_Tabella_4_esenzione_2025"
   thisdirinput <- paste0(file.path(dirtest, testname), "/")
   thisdiroutput <- file.path(dirtest,testname,"g_output")
   dir.create(thisdiroutput, showWarnings = F)
@@ -26,9 +26,9 @@ if (TEST){
 
 # load
 
-for (j in fasce_eta) {
+for (j in esenzioni) {
 
-  D5 <- read.csv(paste0(thisdirinput, "D5_Tabella_1_caratterizzazione_2025_", j, ".csv"))
+  D5 <- read.csv(paste0(thisdirinput, "D5_Tabella_4_caratterizzazione_2025_", j, ".csv"))
 
   D5 <- as.data.table(D5)
 
@@ -103,9 +103,9 @@ descriptive_median_q1q3 <- function(j, covar) {
 #########################################
 # POPULATE ROWS
 
-for (k in fasce_eta) {
+for (k in esenzioni) {
   
-  tab_nice <- copy(get(paste0("D5_Tabella_1_caratterizzazione_2025_", k)))
+  tab_nice <- copy(get(paste0("D5_Tabella_4_caratterizzazione_2025_", k)))
   
   # row 0
   row_header_1 <- c()
@@ -126,6 +126,18 @@ for (k in fasce_eta) {
   # row 3
   row_header_1 <- c(row_header_1, "Donne, n (%)")
   j <- descriptive_N_perc(j, "genere_F_")
+  
+  # row 4
+  row_header_1 <- c(row_header_1, "40-64 anni, n (%)")
+  j <- descriptive_N_perc(j, "fasciaeta_40.64_")
+  
+  # row 5
+  row_header_1 <- c(row_header_1, "65-84 anni, n (%)")
+  j <- descriptive_N_perc(j, "fasciaeta_65.84_")
+  
+  # row 6
+  row_header_1 <- c(row_header_1, "85+, n (%)")
+  j <- descriptive_N_perc(j, "fasciaeta_85._")
 
   # row 4
   row_header_1 <- c(row_header_1, "Pazienti in iper-politerapia (≥10 farmaci ATC IV nello stesso mese per 3 mesi su 12)")
@@ -154,33 +166,30 @@ for (k in fasce_eta) {
   # row 10
   row_header_1 <- c(row_header_1, "5")
   j <- descriptive_N_perc_variante(j, "farmaco_piu_utilizzato_5_")
-  # row 11
-  row_header_1 <- c(row_header_1, "Contesto assistenziale")
+
+  # row 19
+  row_header_1 <- c(row_header_1, "Combinazioni ATC IV livello (*)")
   j <- add_empty_row(j)
-
-  # row 12
-  row_header_1 <- c(row_header_1, "RSA e/o ADI (≥1 giorno durate l’anno)")
-  j <- descriptive_N_perc(j, "rsa_adi_")
-
-  # row 13
-  row_header_1 <- c(row_header_1, "Esenzione per patologia cronica")
-  j <-  add_empty_row(j)
-
-  # row 14
-  row_header_1 <- c(row_header_1, "Cardiocircolatoria")
-  j <- descriptive_N_perc(j, "cardiocircolatoria_")
   
-  # row 15
-  row_header_1 <- c(row_header_1, "Reumatologica")
-  j <- descriptive_N_perc(j, "reumatologica_")
+  # row 20
+  row_header_1 <- c(row_header_1, "1")
+  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_1_")
   
-  # row 16
-  row_header_1 <- c(row_header_1, "Gastroenterologica")
-  j <- descriptive_N_perc(j, "gastroenterologica_")
+  # row 21
+  row_header_1 <- c(row_header_1, "2")
+  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_2_")
   
-  # row 17
-  row_header_1 <- c(row_header_1, "≥1 esenzione per qualsiasi malattia cronica")
-  j <- descriptive_N_perc(j, "esenzione_qualsiasi_")
+  # row 22
+  row_header_1 <- c(row_header_1, "3")
+  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_3_")
+  
+  # row 23
+  row_header_1 <- c(row_header_1, "4")
+  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_4_")
+  
+  # row 24
+  row_header_1 <- c(row_header_1, "5")
+  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_5_")
   
   
 
@@ -236,28 +245,28 @@ for (k in fasce_eta) {
   # FINAL COLUMNS
 
   data_cols <- setdiff(names(tab_nice), "row_header")
-  p1_cols   <- grep("^2016_", data_cols, value = TRUE)
-  p2_cols   <- grep("^2020_", data_cols, value = TRUE)
-  p3_cols <- setdiff(data_cols, c(p1_cols, p2_cols))
-  setcolorder(tab_nice, c("row_header", p1_cols, p2_cols, p3_cols))
+  p1_cols   <- grep("Tutte", data_cols, value = TRUE)
+  # p2_cols   <- grep("^2020_", data_cols, value = TRUE)
+  p3_cols <- setdiff(data_cols, p1_cols)
+  setcolorder(tab_nice, c("row_header", p1_cols, p3_cols))
 
   #########################################
   # NAMES
 
-  # newnames <- c(
-  #   pre = "Pre- Nota 100 AIFA (1ge2016-25gen2022)",
-  #   nota = "Nota 100 AIFA (26gen2022-31lug2025)",
-  #   modifica = "Modifica Nota 100 AIFA(1ago2025-31dic2025)"
-  # )
-  # 
-  # 
-  # tab_nice[1] <- lapply(tab_nice[1], function(x) {
-  # 
-  #   idx <- x %in% names(newnames)
-  #   x[idx] <- unname(newnames[x[idx]])
-  #   x
-  # 
-  #  })
+  newnames <- c(
+    CE = "Centro",
+    NO = "Nord-Ovest",
+    SE = "Sud-Est"
+  )
+
+
+  tab_nice[1] <- lapply(tab_nice[1], function(x) {
+
+    idx <- x %in% names(newnames)
+    x[idx] <- unname(newnames[x[idx]])
+    x
+
+   })
 
 
 
@@ -265,7 +274,7 @@ for (k in fasce_eta) {
   # SAVE
 
   outputfile <- tab_nice
-  nameoutput <- "D6_Table_1"
+  nameoutput <- "D6_Table_4"
   assign(nameoutput, outputfile)
 
   # rds
