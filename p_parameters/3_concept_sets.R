@@ -29,6 +29,19 @@ name_codelist[[""]] <- ""
 name_codelist[[""]] <- ""
 name_codelist[[""]] <- ""
 
+# farmaci potenzialmente inappropriati e interazioni farmaco-farmaco (criteri Beers)
+name_codelist[["med_anticol"]] <- "Anticolinergici (Table S2 of the protocol)"
+name_codelist[["med_fans"]] <- "FANS orali (Table S2 of the protocol)"
+name_codelist[["med_antipsico"]] <- "Antipsicotici (Table S2 of the protocol)"
+name_codelist[["med_sulfo"]] <- "Sulfoniluree a lunga durata (Table S2 of the protocol)"
+name_codelist[["med_digo"]] <- "Digossina >0,125 mg/die (Table S2 of the protocol)"
+name_codelist[["med_sci_insul"]] <- "Scivolatori insulinici (Table S2 of the protocol)"
+name_codelist[["med_anticoag_fans"]] <- "Anticoagulante orale + FANS (Table S2 of the protocol)"
+name_codelist[["med_anticol_atleast_3"]] <- "≥3 farmaci con effetto anticolinergico (Table S2 of the protocol)"
+name_codelist[["med_ace_fans_diur"]] <- "ACE-inibitore/ARB + FANS + diuretico (Table S2 of the protocol)"
+name_codelist[["med_antiagg_fans"]] <- "Antiaggregante + FANS (Table S2 of the protocol)"
+
+
 
 
 
@@ -51,6 +64,8 @@ name_codelist[["dia_hypertension"]] <- "Diagnoses contributing to the algorithm 
 name_codelist[["dia_smoking"]] <- "Diagnoses contributing to the algorithm on smoking (Table 3 of the protocol)"
 name_codelist[["dia_HF"]] <- "Diagnoses contributing to the algorithm on heart failure (Table 3 of the protocol)"
 name_codelist[["dia_RENDIS"]] <- "Diagnoses contributing to the algorithm on chronic kidney disease (Table 3 of the protocol)"
+
+
 
 name_codelist[["proc_bypass"]] <- "Procedures contributing to the algorithm on coronary artery bypass graft (Table 3 of the protocol)"
 name_codelist[["proc_angioplasty"]] <- "Procedures contributing to the algorithm on coronary angioplasty (Table 3 of the protocol)"
@@ -83,6 +98,35 @@ concept_set_codes_our_study[["abira"]][["ATC"]] = c("L02BX03")
 concept_set_codes_our_study[["apalu"]][["ATC"]] = c("L02BB05")
 concept_set_codes_our_study[["enzalu"]][["ATC"]] = c("L02BB04")
 concept_set_codes_our_study[["darolu"]][["ATC"]] = c("L02BB06")
+
+# farmaci potenzialmente inappropriati e interazioni farmaco-farmaco (criteri Beers)
+concept_set_codes_our_study[["med_anticol"]][["ATC"]] <- c("N05AH01", "N05AH02", 
+                                                           "N05AH03", "N05AH04", 
+                                                           "N05AH06", "N05AH53", 
+                                                           "N05AB01", "N05AB02", 
+                                                           "N05AB03", "N05AB04", 
+                                                           "N05AB05", "N05AB06", 
+                                                           "N05AB07", "N05AB08", 
+                                                           "N05AB09", "N05AB10", 
+                                                           "N05AA01", "N05AA02", 
+                                                           "N05AA03", "N05AA04", 
+                                                           "N05AA05", "N05AA06", 
+                                                           "N05AA07", "N05AC01", 
+                                                           "N05AC02", "N05AC03", 
+                                                           "N05AC04", "N05AF01", 
+                                                           "N05AF02", "N05AF03", 
+                                                           "N05AF04", "N05AF05", 
+                                                           "N04AA01", "N04AA02", 
+                                                           "N04AA03", "N04AA04", 
+                                                           "N04AA05", "N04AA08", 
+                                                           "N04AA09", "N04AA10", 
+                                                           "N04AA11", "N04AA12", 
+                                                           "N04AB01", "N04AB02", 
+                                                           "N04AC01", "N04AC30")
+
+concept_set_codes_our_study[["med_anticol"]][["ATC"]] <- c()
+
+
 
 # 
 # concept_set_codes_our_study[["med_iperten"]][["ATC"]] <- c("C09", "C02", "C07", "C08C")
