@@ -32,7 +32,7 @@ for (j in esenzioni) {
 
   D5 <- as.data.table(D5)
 
-  assign(paste0("D5_Tabella_1_caratterizzazione_2025_",j), D5)
+  assign(paste0("D5_Tabella_4_caratterizzazione_2025_",j), D5)
 
 }
 
