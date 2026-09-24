@@ -36,6 +36,7 @@ name_codelist[["med_antipsico"]] <- "Antipsicotici (Table S2 of the protocol)"
 name_codelist[["med_sulfo"]] <- "Sulfoniluree a lunga durata (Table S2 of the protocol)"
 name_codelist[["med_digo"]] <- "Digossina >0,125 mg/die (Table S2 of the protocol)"
 name_codelist[["med_sci_insul"]] <- "Scivolatori insulinici (Table S2 of the protocol)"
+name_codelist[["med_ppi"]] <- "Inibitori di pompa protonica (PPI) (Table S2 of the protocol)"
 name_codelist[["med_anticoag_fans"]] <- "Anticoagulante orale + FANS (Table S2 of the protocol)"
 name_codelist[["med_anticol_atleast_3"]] <- "≥3 farmaci con effetto anticolinergico (Table S2 of the protocol)"
 name_codelist[["med_ace_fans_diur"]] <- "ACE-inibitore/ARB + FANS + diuretico (Table S2 of the protocol)"
@@ -124,7 +125,57 @@ concept_set_codes_our_study[["med_anticol"]][["ATC"]] <- c("N05AH01", "N05AH02",
                                                            "N04AB01", "N04AB02", 
                                                            "N04AC01", "N04AC30")
 
-concept_set_codes_our_study[["med_anticol"]][["ATC"]] <- c()
+concept_set_codes_our_study[["med_fans"]][["ATC"]] <- c("M01AA", "M01AC", "M01AE",
+                                                        "M01AG", "M01AH", "M01AX")
+
+concept_set_codes_our_study[["med_antipsico"]][["ATC"]] <- c("N05AA01", "N05AA02",
+                                                             "N05AA03", "N05AA04",
+                                                             "N05AA05", "N05AA06",
+                                                             "N05AA07", "N05AB01", 
+                                                             "N05AB02", "N05AB03", 
+                                                             "N05AB04", "N05AB05", 
+                                                             "N05AB06", "N05AB07", 
+                                                             "N05AB08", "N05AB09", 
+                                                             "N05AB10", "N05AC01", 
+                                                             "N05AC02", "N05AC03", 
+                                                             "N05AC04", "N05AD01", 
+                                                             "N05AD02", "N05AD03",
+                                                             "N05AD04", "N05AD05",
+                                                             "N05AD06", "N05AD07",
+                                                             "N05AD08", "N05AD09",
+                                                             "N05AD10", "N05AE01",
+                                                             "N05AE02", "N05AE03",
+                                                             "N05AE04", "N05AE05",
+                                                             "N05AF01", "N05AF02",
+                                                             "N05AF03", "N05AF04", 
+                                                             "N05AF05", "N05AG01", 
+                                                             "N05AG02", "N05AG03", 
+                                                             "N05AH01", "N05AH02", 
+                                                             "N05AH03", "N05AH04",
+                                                             "N05AH05", "N05AH06", 
+                                                             "N05AH53", "N05AL01", 
+                                                             "N05AL02", "N05AL03", 
+                                                             "N05AL04", "N05AL05",
+                                                             "N05AL06", "N05AL07", 
+                                                             "N05AN01", "N05AX07", 
+                                                             "N05AX08", "N05AX10", 
+                                                             "N05AX11", "N05AX12",
+                                                             "N05AX13", "N05AX14", 
+                                                             "N05AX15", "N05AX16", 
+                                                             "N05AX17", "N05AX50")
+
+concept_set_codes_our_study[["med_sulfo"]][["ATC"]] <- c("A10BB01", "A10BB02", 
+                                                         "A10BB09", "A10BB12")
+
+name_codelist[["med_sci_insul"]] <- c()
+
+name_codelist[["med_ppi"]] <- c("A02BC01", "A02BC02", "A02BC03", "A02BC04", 
+                                "A02BC05", "A02BC06", "A02BC51", "A02BC53", 
+                                "A02BC54")
+
+
+
+
 
 
 
