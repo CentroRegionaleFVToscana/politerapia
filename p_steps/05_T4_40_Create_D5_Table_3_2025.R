@@ -1,5 +1,7 @@
 # author: Sabrina Giometto, Elena Ferrati
 
+# v 0.2 combinazioni di ATC IV livello create
+
 # v 0.1 11 Sep 2026
 
 # prima draft
@@ -44,6 +46,22 @@ atc_IV_long <- unique(atc_IV_long, by = c("person_id", "atc_IV"))
 
 atc_IV_long[, atc:=NULL]
 
+# create combinations of ATC IV level
+atc_IV_long[, comb_atc_IV:=paste(atc_IV, collapse = " "), person_id]
+
+# order alphabetically to not cosider two sequence with same values but
+# different order as different strings
+atc_IV_long[, comb_ord := vapply(
+  strsplit(trimws(comb_atc_IV), "\\s+"),
+  function(x) paste(sort(x, method = "radix"), collapse = " "),
+  character(1)
+)]
+atc_IV_long <- unique(atc_IV_long, by = c("person_id", "comb_ord"))
+atc_IV_long[, `:=`(atc_IV=NULL,
+                   comb_atc_IV=NULL)]
+# reduce to persons with combinations of at least 5 different ATC IV level
+atc_IV_long[, n_comb := lengths(strsplit(trimws(comb_ord), "\\s+"))]
+atc_IV_long <- atc_IV_long[n_comb>=5 ,]
 
 
 toadd <- copy(data_new)[, asl := "Tutte"]
@@ -96,20 +114,20 @@ for (k in 1:5) {
   
 }
 
-# extract 5 most frequent ATC IV level
+# extract 5 most frequent combinations of ATC IV level
 temp <- merge(atc_IV_long, data_new[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
 
-temp <- temp[, .N, by = c("atc_IV","asl")]
+temp <- temp[, .N, by = c("comb_ord","asl")]
 setorder(temp, asl, - N)
 temp[, ord := seq(.N), by = asl]
 temp <- temp[ord <= 5, ]
 
 wide <- dcast(temp, 
               asl ~ ord, 
-              value.var = c("atc_IV", "N")
+              value.var = c("comb_ord", "N")
 )
 
-setnames(wide, sub("^atc_IV_(\\d+)$", "combinazione_piu_utilizzata_\\1", names(wide)))
+setnames(wide, sub("^comb_ord_(\\d+)$", "combinazione_piu_utilizzata_\\1", names(wide)))
 setnames(wide, sub("^N_(\\d+)$", "combinazione_piu_utilizzata_\\1_N", names(wide)))
 
 
