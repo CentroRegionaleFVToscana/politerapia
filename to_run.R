@@ -49,5 +49,12 @@ source(paste0(thisdir,"/p_parameters/6_parameters_study.R"))
 # source(paste0(thisdir,"/p_steps/06_T5_20_Create_D6_Table_1.R"))
 # source(paste0(thisdir,"/p_steps/05_T4_30_Create_D5_Table_2_asl_2025.R"))
 # source(paste0(thisdir,"/p_steps/06_T5_30_Create_D6_Table_2.R"))
+# source(paste0(thisdir,"/p_steps/05_T4_40_Create_D5_Table_3_2025.R"))
+# source(paste0(thisdir,"/p_steps/06_T5_40_Create_D6_Table_3.R"))
+# source(paste0(thisdir,"/p_steps/05_T4_50_Create_D5_Table_4_esenzione_2025.R"))
+# source(paste0(thisdir,"/p_steps/06_T5_50_Create_D6_Table_4.R"))
+# source(paste0(thisdir,"/p_steps/05_T4_60_Create_D5_Table_7_2025.R"))
+# source(paste0(thisdir,"/p_steps/06_T5_60_Create_D6_Table_7.R"))
+
 
 
