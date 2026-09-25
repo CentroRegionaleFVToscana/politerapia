@@ -1,5 +1,7 @@
 # author: Sabrina Giometto, Elena Ferrati
 
+# v 0.3 costruzione delle combinazioni di ATC IV livello modificata
+
 # v 0.2 combinazioni di ATC IV livello create
 
 # v 0.1 11 Sep 2026
@@ -46,48 +48,72 @@ atc_IV_long <- unique(atc_IV_long, by = c("person_id", "atc_IV"))
 
 atc_IV_long[, atc:=NULL]
 
-# create combinations of ATC IV level
-atc_IV_long[, comb_atc_IV:=paste(atc_IV, collapse = " "), person_id]
-
-# order alphabetically to not cosider two sequence with same values but
-# different order as different strings
-atc_IV_long[, comb_ord := vapply(
-  strsplit(trimws(comb_atc_IV), "\\s+"),
-  function(x) paste(sort(x, method = "radix"), collapse = " "),
-  character(1)
-)]
-atc_IV_long <- unique(atc_IV_long, by = c("person_id", "comb_ord"))
-atc_IV_long[, `:=`(atc_IV=NULL,
-                   comb_atc_IV=NULL)]
-# reduce to persons with combinations of at least 5 different ATC IV level
-atc_IV_long[, n_comb := lengths(strsplit(trimws(comb_ord), "\\s+"))]
-atc_IV_long <- atc_IV_long[n_comb>=5 ,]
+# # create combinations of ATC IV level
+# atc_IV_long[, comb_atc_IV:=paste(atc_IV, collapse = " "), person_id]
+# 
+# # order alphabetically to not cosider two sequence with same values but
+# # different order as different strings
+# atc_IV_long[, comb_ord := vapply(
+#   strsplit(trimws(comb_atc_IV), "\\s+"),
+#   function(x) paste(sort(x, method = "radix"), collapse = " "),
+#   character(1)
+# )]
+# atc_IV_long <- unique(atc_IV_long, by = c("person_id", "comb_ord"))
+# atc_IV_long[, `:=`(atc_IV=NULL,
+#                    comb_atc_IV=NULL)]
+# # reduce to persons with combinations of at least 5 different ATC IV level
+# atc_IV_long[, n_comb := lengths(strsplit(trimws(comb_ord), "\\s+"))]
+# atc_IV_long <- atc_IV_long[n_comb>=5 ,]
 
 
 toadd <- copy(data_new)[, asl := "Tutte"]
 data_new <- rbind(data_new, toadd)
 
-# Create D5 with sociodemographic characteristics
-D5_nocov <- data_new[, .(
-                          N          = .N,
-                          genere_F_N = sum(genere=="F"),
-                          genere_F_p = round(sum(genere=="F")/.N,3)*100),
-                       .(asl)]
+temp <- merge(atc_IV_long, data_new[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
 
-for (i in fasce_eta) {
-    
-    tmp <- data_new[, .(
-                        N = .N, 
-                        fasciaeta_N = sum(fasciaeta==i),
-                        fasciaeta_p = round(sum(fasciaeta==i)/.N, 3)*100),
-                      .(asl)] 
-    
-    setnames(tmp, "fasciaeta_N", paste0("fasciaeta_", i, "_N"))
-    setnames(tmp, "fasciaeta_p", paste0("fasciaeta_", i, "_p"))
-    
-    D5_nocov <- merge(D5_nocov, tmp, by = c("asl", "N"))
-    
+# create 10 most frequent combinations of at least 5 different ATC IV level
+res <- temp[, {
+  trans <- as(split(atc_IV, person_id), "transactions")
+  fi <- eclat(trans,
+              parameter = list(supp = 0.01, minlen = 5, maxlen = 20),
+              control   = list(verbose = FALSE))
+  
+  if (length(fi) == 0) NULL else {
+    top5 <- head(sort(fi, by = "support"), 5)
+    .(combo = labels(top5),
+      N     = round(quality(top5)$support * length(trans)),
+      p  = round(100 * quality(top5)$support, 1))
   }
+}, by = asl]
+
+setorder(res, asl, - N)
+res[, ord := seq(.N), by = asl]
+res <- res[ord <= 10, ]
+
+res[, combo := gsub(",", " ", gsub("[{}]", "", combo))]
+
+
+# # Create D5 with sociodemographic characteristics
+# D5_nocov <- data_new[, .(
+#                           N          = .N,
+#                           genere_F_N = sum(genere=="F"),
+#                           genere_F_p = round(sum(genere=="F")/.N,3)*100),
+#                        .(asl)]
+# 
+# for (i in fasce_eta) {
+#     
+#     tmp <- data_new[, .(
+#                         N = .N, 
+#                         fasciaeta_N = sum(fasciaeta==i),
+#                         fasciaeta_p = round(sum(fasciaeta==i)/.N, 3)*100),
+#                       .(asl)] 
+#     
+#     setnames(tmp, "fasciaeta_N", paste0("fasciaeta_", i, "_N"))
+#     setnames(tmp, "fasciaeta_p", paste0("fasciaeta_", i, "_p"))
+#     
+#     D5_nocov <- merge(D5_nocov, tmp, by = c("asl", "N"))
+#     
+#   }
 
 # extract 5 most frequent ATC V level
 temp <- merge(atc_long, data_new[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
@@ -105,6 +131,8 @@ wide <- dcast(temp,
 setnames(wide, sub("^atc_(\\d+)$", "farmaco_piu_utilizzato_\\1", names(wide)))
 setnames(wide, sub("^N_(\\d+)$", "farmaco_piu_utilizzato_\\1_N", names(wide)))
 
+# create D5
+D5_nocov <- data_new[, .N, asl]
 
 D5_nocov <- merge(D5_nocov, wide, by = "asl")
 
@@ -114,30 +142,33 @@ for (k in 1:5) {
   
 }
 
-# extract 5 most frequent combinations of ATC IV level
-temp <- merge(atc_IV_long, data_new[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
 
-temp <- temp[, .N, by = c("comb_ord","asl")]
-setorder(temp, asl, - N)
-temp[, ord := seq(.N), by = asl]
-temp <- temp[ord <= 5, ]
+# temp <- merge(atc_IV_long, data_new[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
+# 
+# temp <- temp[, .N, by = c("comb_ord","asl")]
+# setorder(temp, asl, - N)
+# temp[, ord := seq(.N), by = asl]
+# temp <- temp[ord <= 5, ]
 
-wide <- dcast(temp, 
+
+# # extract 5 most frequent combinations of ATC IV level
+wide <- dcast(res, 
               asl ~ ord, 
-              value.var = c("comb_ord", "N")
+              value.var = c("combo", "N", "p")
 )
 
-setnames(wide, sub("^comb_ord_(\\d+)$", "combinazione_piu_utilizzata_\\1", names(wide)))
-setnames(wide, sub("^N_(\\d+)$", "combinazione_piu_utilizzata_\\1_N", names(wide)))
+setnames(wide, sub("^combo_(\\d+)$", "combinazione_5_piu_utilizzata_\\1", names(wide)))
+setnames(wide, sub("^N_(\\d+)$", "combinazione_5_piu_utilizzata_\\1_N", names(wide)))
+setnames(wide, sub("^p_(\\d+)$", "combinazione_5_piu_utilizzata_\\1_p", names(wide)))
 
 
 D5_nocov <- merge(D5_nocov, wide, by = "asl")
 
-for (k in 1:5) {
-  
-  D5_nocov[, paste0("combinazione_piu_utilizzata_",k, "_p"):=round(get(paste0("combinazione_piu_utilizzata_",k, "_N"))/N,3)*100]
-  
-}
+# for (k in 1:5) {
+#   
+#   D5_nocov[, paste0("combinazione_piu_utilizzata_",k, "_p"):=round(get(paste0("combinazione_piu_utilizzata_",k, "_N"))/N,3)*100]
+#   
+# }
 
 
 # create D5 with binary covariates
