@@ -41,86 +41,85 @@ atc_IV_long <- copy(atc_long)
 atc_IV_long[, atc_IV:=substring(atc, 1, 5)]
 atc_IV_long <- unique(atc_IV_long, by = c("person_id", "atc_IV"))
 atc_IV_long[, atc:=NULL]
-# create combinations of ATC IV level
-atc_IV_long[, comb_atc_IV:=paste(atc_IV, collapse = " "), person_id]
 
-# order alphabetically to not cosider two sequence with same values but
-# different order as different strings
-atc_IV_long[, comb_ord := vapply(
-  strsplit(trimws(comb_atc_IV), "\\s+"),
-  function(x) paste(sort(x, method = "radix"), collapse = " "),
-  character(1)
-)]
-atc_IV_long <- unique(atc_IV_long, by = c("person_id", "comb_ord"))
-atc_IV_long[, `:=`(atc_IV=NULL,
-                   comb_atc_IV=NULL)]
-# reduce to persons with combinations of at least 5 different ATC IV level
-atc_IV_long[, n_comb := lengths(strsplit(trimws(comb_ord), "\\s+"))]
-atc_IV_long <- atc_IV_long[n_comb>=5 ,]
 
 toadd <- copy(data)[, asl := "Tutte"]
 data <- rbind(data, toadd)
 
+temp <- merge(atc_IV_long, data[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
 
-for (j in asl) {
-
-  D5 <- data[, .N, asl]
+# create 10 most frequent combinations of at least 5 different ATC IV level
+res <- temp[, {
+  trans <- as(split(atc_IV, person_id), "transactions")
+  fi <- eclat(trans,
+              parameter = list(supp = 0.01, minlen = 5, maxlen = 20),
+              control   = list(verbose = FALSE))
   
-  # extract 10 most frequent ATC IV level
-  # distr <- data.frame(N=1)
-  # 
-  # for (k in atc_IV_levels) {
-  # 
-  #   tmp <- data.frame(sum(data[asl==j, get(k)==1]))
-  # 
-  #   colnames(tmp) <- k
-  # 
-  #   distr <- cbind(distr, tmp)
-  # 
-  # }
-  # 
-  # distr <- as.data.table(distr)
-  # 
-  # distr_l <- melt(distr[, N:=NULL],
-  #                 measure.vars = names(distr),
-  #                 variable.name = "variable",
-  #                 value.name = "atc")
-  # 
-  # distr_l <- setorder(distr_l, -atc)
-  # 
-  # distr_l_sel <- distr_l[c(1:10)]
-  # 
-  # variable_names <- distr_l_sel[, as.character(variable)]
-  # 
-  # variable_names <- variable_names[!is.na(variable_names)]
-  
-  temp <- merge(atc_IV_long, data[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
-  
-  temp <- temp[, .N, by = c("comb_ord","asl")]
-  setorder(temp, asl, - N)
-  temp[, ord := seq(.N), by = asl]
-  temp <- temp[ord <= 10, ]
-  
-  wide <- dcast(temp, 
-                asl ~ ord, 
-                value.var = c("comb_ord", "N")
-  )
-  
-  setnames(wide, sub("^comb_ord_(\\d+)$", "combinazione_piu_utilizzata_\\1", names(wide)))
-  setnames(wide, sub("^N_(\\d+)$", "combinazione_piu_utilizzata_\\1_N", names(wide)))
-  
-  
-  D5 <- merge(D5, wide, by = "asl")
-  
-  for (k in 1:10) {
-    
-    D5[, paste0("combinazione_piu_utilizzata_",k, "_p"):=round(get(paste0("combinazione_piu_utilizzata_",k, "_N"))/N,3)*100]
-    
+  if (length(fi) == 0) NULL else {
+    top5 <- head(sort(fi, by = "support"), 10)
+    .(combo = labels(top5),
+      N     = round(quality(top5)$support * length(trans)),
+      p  = round(100 * quality(top5)$support, 1))
   }
+}, by = asl]
 
-}
+setorder(res, asl, - N)
+res[, ord := seq(.N), by = asl]
+res <- res[ord <= 10, ]
+
+res[, combo := gsub(",", " ", gsub("[{}]", "", combo))]
+
+# create 10 most frequent combinations of at least 10 ATC IV level
+res_10 <- temp[, {
+  trans <- as(split(atc_IV, person_id), "transactions")
+  fi <- eclat(trans,
+              parameter = list(supp = 0.01, minlen = 10, maxlen = 20),
+              control   = list(verbose = FALSE))
+  
+  if (length(fi) == 0) NULL else {
+    top5 <- head(sort(fi, by = "support"), 10)
+    .(combo = labels(top5),
+      N     = round(quality(top5)$support * length(trans)),
+      p  = round(100 * quality(top5)$support, 1))
+  }
+}, by = asl]
+
+setorder(res_10, asl, - N)
+res_10[, ord := seq(.N), by = asl]
+res_10 <- res_10[ord <= 10, ]
+
+res_10[, combo := gsub(",", " ", gsub("[{}]", "", combo))]
 
 
+# create D5
+D5 <- data[, .N, asl]
+
+
+wide <- dcast(res, 
+              asl ~ ord, 
+              value.var = c("combo", "N", "p")
+)
+
+setnames(wide, sub("^combo_(\\d+)$", "combinazione_5_piu_utilizzata_\\1", names(wide)))
+setnames(wide, sub("^N_(\\d+)$", "combinazione_5_piu_utilizzata_\\1_N", names(wide)))
+setnames(wide, sub("^p_(\\d+)$", "combinazione_5_piu_utilizzata_\\1_p", names(wide)))
+
+D5 <- merge(D5, wide, by = "asl")
+
+wide <- dcast(res_10, 
+              asl ~ ord, 
+              value.var = c("combo", "N", "p")
+)
+
+setnames(wide, sub("^combo_(\\d+)$", "combinazione_10_piu_utilizzata_\\1", names(wide)))
+setnames(wide, sub("^N_(\\d+)$", "combinazione_10_piu_utilizzata_\\1_N", names(wide)))
+setnames(wide, sub("^p_(\\d+)$", "combinazione_10_piu_utilizzata_\\1_p", names(wide)))
+
+D5 <- merge(D5, wide, by = "asl")
+  
+  
+
+# save
 saveRDS(D5, file = paste0(thisdiroutput, "/D5_Table_2_combinazioni_farmaci_", year, ".rds"))
 write.csv(D5, file = paste0(thisdirexp, "/D5_Table_2_combinazioni_farmaci_", year, ".csv"))
 
