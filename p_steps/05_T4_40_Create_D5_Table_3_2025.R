@@ -94,14 +94,14 @@ res[, combo := gsub(",", " ", gsub("[{}]", "", combo))]
 
 
 # # Create D5 with sociodemographic characteristics
-# D5_nocov <- data_new[, .(
-#                           N          = .N,
-#                           genere_F_N = sum(genere=="F"),
-#                           genere_F_p = round(sum(genere=="F")/.N,3)*100),
-#                        .(asl)]
-# 
+ D5_nocov <- data_new[, .(
+                           N          = .N,
+                           genere_F_N = sum(genere=="F"),
+                           genere_F_p = round(sum(genere=="F")/.N,3)*100),
+                        .(asl)]
+
 # for (i in fasce_eta) {
-#     
+     
 #     tmp <- data_new[, .(
 #                         N = .N, 
 #                         fasciaeta_N = sum(fasciaeta==i),
@@ -132,7 +132,7 @@ setnames(wide, sub("^atc_(\\d+)$", "farmaco_piu_utilizzato_\\1", names(wide)))
 setnames(wide, sub("^N_(\\d+)$", "farmaco_piu_utilizzato_\\1_N", names(wide)))
 
 # create D5
-D5_nocov <- data_new[, .N, asl]
+#D5_nocov <- data_new[, .N, asl]
 
 D5_nocov <- merge(D5_nocov, wide, by = "asl")
 
@@ -152,17 +152,17 @@ for (k in 1:5) {
 
 
 # # extract 5 most frequent combinations of ATC IV level
-wide <- dcast(res, 
+wide_comb <- dcast(res, 
               asl ~ ord, 
               value.var = c("combo", "N", "p")
 )
 
-setnames(wide, sub("^combo_(\\d+)$", "combinazione_5_piu_utilizzata_\\1", names(wide)))
-setnames(wide, sub("^N_(\\d+)$", "combinazione_5_piu_utilizzata_\\1_N", names(wide)))
-setnames(wide, sub("^p_(\\d+)$", "combinazione_5_piu_utilizzata_\\1_p", names(wide)))
+setnames(wide_comb, sub("^combo_(\\d+)$", "combinazione_5_piu_utilizzata_\\1", names(wide_comb)))
+setnames(wide_comb, sub("^N_(\\d+)$", "combinazione_5_piu_utilizzata_\\1_N", names(wide_comb)))
+setnames(wide_comb, sub("^p_(\\d+)$", "combinazione_5_piu_utilizzata_\\1_p", names(wide_comb)))
 
 
-D5_nocov <- merge(D5_nocov, wide, by = "asl")
+D5_nocov <- merge(D5_nocov, wide_comb, by = "asl")
 
 # for (k in 1:5) {
 #   
