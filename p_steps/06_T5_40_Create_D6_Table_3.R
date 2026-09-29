@@ -181,23 +181,23 @@ j <- add_empty_row(j)
 
 # row 20
 row_header_1 <- c(row_header_1, "1")
-j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_1_")
+j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_1_")
 
 # row 21
 row_header_1 <- c(row_header_1, "2")
-j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_2_")
+j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_2_")
 
 # row 22
 row_header_1 <- c(row_header_1, "3")
-j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_3_")
+j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_3_")
 
 # row 23
 row_header_1 <- c(row_header_1, "4")
-j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_4_")
+j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_4_")
 
 # row 24
 row_header_1 <- c(row_header_1, "5")
-j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_5_")
+j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_5_")
 
 
 
