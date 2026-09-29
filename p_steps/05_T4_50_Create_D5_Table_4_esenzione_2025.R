@@ -58,7 +58,7 @@ atc_IV_long[, atc:=NULL]
 toadd <- copy(data)[, asl := "Tutte"]
 data <- rbind(data, toadd)
 
-temp <- merge(atc_IV_long, data_new[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
+temp <- merge(atc_IV_long, data[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
 
 # create 10 most frequent combinations of at least 5 different ATC IV level
 res <- temp[, {
