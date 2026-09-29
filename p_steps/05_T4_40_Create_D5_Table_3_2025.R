@@ -100,20 +100,20 @@ res[, combo := gsub(",", " ", gsub("[{}]", "", combo))]
                            genere_F_p = round(sum(genere=="F")/.N,3)*100),
                         .(asl)]
 
-# for (i in fasce_eta) {
+ for (i in fasce_eta) {
      
-#     tmp <- data_new[, .(
-#                         N = .N, 
-#                         fasciaeta_N = sum(fasciaeta==i),
-#                         fasciaeta_p = round(sum(fasciaeta==i)/.N, 3)*100),
-#                       .(asl)] 
-#     
-#     setnames(tmp, "fasciaeta_N", paste0("fasciaeta_", i, "_N"))
-#     setnames(tmp, "fasciaeta_p", paste0("fasciaeta_", i, "_p"))
-#     
-#     D5_nocov <- merge(D5_nocov, tmp, by = c("asl", "N"))
-#     
-#   }
+        tmp <- data_new[, .(
+                         N = .N, 
+                         fasciaeta_N = sum(fasciaeta==i),
+                         fasciaeta_p = round(sum(fasciaeta==i)/.N, 3)*100),
+                       .(asl)] 
+     
+     setnames(tmp, "fasciaeta_N", paste0("fasciaeta_", i, "_N"))
+     setnames(tmp, "fasciaeta_p", paste0("fasciaeta_", i, "_p"))
+     
+     D5_nocov <- merge(D5_nocov, tmp, by = c("asl", "N"))
+     
+   }
 
 # extract 5 most frequent ATC V level
 temp <- merge(atc_long, data_new[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
