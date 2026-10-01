@@ -49,21 +49,22 @@ atc_IV_long <- unique(atc_IV_long, by = c("person_id", "atc_IV"))
 atc_IV_long[, atc:=NULL]
 
 # # create combinations of ATC IV level
-# atc_IV_long[, comb_atc_IV:=paste(atc_IV, collapse = " "), person_id]
+atc_IV_long[, comb_atc_IV:=paste(atc_IV, collapse = " "), person_id]
 # 
 # # order alphabetically to not cosider two sequence with same values but
 # # different order as different strings
-# atc_IV_long[, comb_ord := vapply(
-#   strsplit(trimws(comb_atc_IV), "\\s+"),
-#   function(x) paste(sort(x, method = "radix"), collapse = " "),
-#   character(1)
-# )]
-# atc_IV_long <- unique(atc_IV_long, by = c("person_id", "comb_ord"))
-# atc_IV_long[, `:=`(atc_IV=NULL,
-#                    comb_atc_IV=NULL)]
+atc_IV_long[, comb_ord := vapply(
+   strsplit(trimws(comb_atc_IV), "\\s+"),
+   function(x) paste(sort(x, method = "radix"), collapse = " "),
+   character(1)
+)]
+
+atc_IV_long <- unique(atc_IV_long, by = c("person_id", "comb_ord"))
+atc_IV_long[, `:=`(atc_IV=NULL,
+                    comb_atc_IV=NULL)]
 # # reduce to persons with combinations of at least 5 different ATC IV level
-# atc_IV_long[, n_comb := lengths(strsplit(trimws(comb_ord), "\\s+"))]
-# atc_IV_long <- atc_IV_long[n_comb>=5 ,]
+atc_IV_long[, n_comb := lengths(strsplit(trimws(comb_ord), "\\s+"))]
+atc_IV_long <- atc_IV_long[n_comb>=5 ,]
 
 
 toadd <- copy(data_new)[, asl := "Tutte"]
@@ -72,25 +73,34 @@ data_new <- rbind(data_new, toadd)
 temp <- merge(atc_IV_long, data_new[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
 
 # create 10 most frequent combinations of at least 5 different ATC IV level
-res <- temp[, {
-  trans <- as(split(atc_IV, person_id), "transactions")
-  fi <- eclat(trans,
-              parameter = list(supp = 0.01, minlen = 5, maxlen = 20),
-              control   = list(verbose = FALSE))
-  
-  if (length(fi) == 0) NULL else {
-    top5 <- head(sort(fi, by = "support"), 5)
-    .(combo = labels(top5),
-      N     = round(quality(top5)$support * length(trans)),
-      p  = round(100 * quality(top5)$support, 1))
-  }
-}, by = asl]
+#res <- temp[, {
+#  trans <- as(split(atc_IV, person_id), "transactions")
+#  fi <- eclat(trans,
+#              parameter = list(supp = 0.01, minlen = 5, maxlen = 20),
+#              control   = list(verbose = FALSE))
+#  
+#  if (length(fi) == 0) NULL else {
+#    top5 <- head(sort(fi, by = "support"), 5)
+#    .(combo = labels(top5),
+#      N     = round(quality(top5)$support * length(trans)),
+#      p  = round(100 * quality(top5)$support, 1))
+#  }
+#}, by = asl]
 
+res <- temp[, .N, by = .(asl, comb_ord)]
 setorder(res, asl, - N)
 res[, ord := seq(.N), by = asl]
 res <- res[ord <= 10, ]
 
-res[, combo := gsub(",", " ", gsub("[{}]", "", combo))]
+setnames(res, "comb_ord", "combo")
+tot_asl <- data_new[, .(tot_pazienti = .N), by = asl]
+res <- merge(res, tot_asl, by = "asl", all.x = TRUE)
+res[, p := round(100 * N / tot_pazienti, 1)]
+res[, tot_pazienti := NULL]
+
+#res[, combo := gsub(",", " ", gsub("[{}]", "", combo))]
+
+
 
 
 # # Create D5 with sociodemographic characteristics
