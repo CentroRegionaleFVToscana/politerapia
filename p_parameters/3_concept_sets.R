@@ -1,7 +1,7 @@
 ###################################################################
 # DESCRIBE THE CONCEPT SETS
 ###################################################################
-concept_sets_of_our_study_drugs <- c()
+concept_sets_of_our_study_drugs <- c("med_anticol", "med_fans", "med_antipsico", "med_sulfo", "med_ins_rapida", "med_ins_lunga","med_ppi", "med_anticoag")
 
 # "med_iperten", "med_cardioisc_angi", "med_dislip", "med_diab", "med_RENDIS_Alg1_1", "med_RENDIS_Alg1_2", "med_RENDIS_Alg1_3", "med_RENDIS_Alg2", "med_cortic", "med_antiang", "med_antitromb",  "med_bifos"
 
