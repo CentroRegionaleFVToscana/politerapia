@@ -16,7 +16,7 @@ baselinedate <- 20151231
 # list of conceptset datasets
 
 dirarchive <- file.path(thisdir,"..","..","p_parameters","archive_parameters/")
-parameters_this_step <- as.data.table(unique(readxl::read_excel(file.path(dirarchive,"codebooks",paste0("D3_coorte_con_caratterizzazione.xlsx")),1)))
+parameters_this_step <- as.data.table(unique(readxl::read_excel(file.path(dirarchive,"codebooks",paste0("D3_coorte_con_bears.xlsx")),1)))
 
 component_variables <- unlist(unique(parameters_this_step[parameter == "component",.(value)]))
 
@@ -35,10 +35,10 @@ for (component in component_variables) {
 # }
 
 listdatasetsRData <- c(unique(c(allingredients, "med_digo", "med_acearb", "med_diur", "med_bloccal", "med_altre_comb", "med_antiagg")))
-listdatasetscsv <- c("spf2025", "fed2025")
+listdatasetscsv <- c()
 
 
-listdatasets <- c("D3_coorte_2025",  "D3_RSA_ADI", listdatasetsRData, listdatasetscsv)
+listdatasets <- c("D3_coorte_2025",  listdatasetsRData, listdatasetscsv)
 
 # dates variables 
 
