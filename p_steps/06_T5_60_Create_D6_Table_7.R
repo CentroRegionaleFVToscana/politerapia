@@ -1,20 +1,20 @@
 
-#### D6_Table_2 ----
+#### D6_Table_7 ----
 
 
 # authors: Sabrina Giometto, Elena Ferrati
 
-# v 0.1 29 Sep 2026 Creation of D6 started
+# v 0.1 25 Sep 2026 Creation of D6 started
 
 
 
-print('CREATE D6_Table_3')
+print('CREATE D6_Table_7')
 
 
 # assign directories
 
 if (TEST){ 
-  testname <- "test_D6_Tabella_3_2025"
+  testname <- "test_D6_Tabella_7_2025"
   thisdirinput <- paste0(file.path(dirtest, testname), "/")
   thisdiroutput <- file.path(dirtest,testname,"g_output")
   dir.create(thisdiroutput, showWarnings = F)
@@ -25,8 +25,7 @@ if (TEST){
 
 
 # load
-  
-D5 <- read.csv(paste0(thisdirinput, "/D5_Tabella_3_caratterizzazione_2025.csv"))
+D5 <- read.csv(paste0(thisdirinput, "/D5_Tabella_7_caratterizzazione_2025.csv"))
 D5 <- as.data.table(D5)
 
 
@@ -111,94 +110,69 @@ j <- j + 1
 tab_nice[, cell := as.character(N)]
 setnames(tab_nice, "cell", paste0("cell_", j))
 
-# row 3
-row_header_1 <- c(row_header_1, "Donne, n (%)")
-j <- descriptive_N_perc(j, "genere_F_")
-
-# row 4
-row_header_1 <- c(row_header_1, "40-64 anni, n (%)")
-j <- descriptive_N_perc(j, "fasciaeta_40.64_")
-
-# row 5
-row_header_1 <- c(row_header_1, "65-84 anni, n (%)")
-j <- descriptive_N_perc(j, "fasciaeta_65.84_")
-
-# row 6
-row_header_1 <- c(row_header_1, "85+, n (%)")
-j <- descriptive_N_perc(j, "fasciaeta_85._")
-
-# row 7
-row_header_1 <- c(row_header_1, "Pazienti in iper-politerapia (≥10 farmaci ATC IV nello stesso mese per 3 mesi su 12), n (%)")
-j <- descriptive_N_perc(j, "iperpoliterapia_")
-
 # row 8
-row_header_1 <- c(row_header_1, "Esenzione per patologia cronica")
+row_header_1 <- c(row_header_1, "Anziani potenzialmente esposti a prescrizioni di farmaci inappropriati (indipendentemente dalla diagnosi)")
 j <-  add_empty_row(j)
 
+# row 8
+row_header_1 <- c(row_header_1, "Pazienti politrattati esposti, n (%)")
+j <-  add_empty_row(j)
+
+# row 3
+row_header_1 <- c(row_header_1, "Anticolinergici (e.g. Idrossizina, clorfeniramina, prometazina")
+j <- descriptive_N_perc(j, "anticol_")
+
+# row 4
+row_header_1 <- c(row_header_1, "FANS orali (e.g. Ibuprofene, naprossene, diclofenac)")
+j <- descriptive_N_perc(j, "fans_")
+
+# row 5
+row_header_1 <- c(row_header_1, "Antipsicotici (e.g. Aloperidolo, clorpromazina)")
+j <- descriptive_N_perc(j, "antipsico_")
+
+# row 6
+row_header_1 <- c(row_header_1, "Sulfoniluree a lunga durata (Glibenclamide)")
+j <- descriptive_N_perc(j, "sulfo_")
+
+# row 7
+row_header_1 <- c(row_header_1, "Digossina >0,125 mg/die")
+j <- descriptive_N_perc(j, "digo_")
+
+# row 8
+row_header_1 <- c(row_header_1, "Scivolatori insulinici (Insulina rapida senza basale)")
+j <- descriptive_N_perc(j, "sci_insul_")
+
 # row 9
-row_header_1 <- c(row_header_1, "Cardiocircolatoria")
-j <- descriptive_N_perc(j, "cardiocircolatoria_")
+row_header_1 <- c(row_header_1, "Inibitori di pompa protonica (PPI)")
+j <- descriptive_N_perc(j, "ppi_")
+
+# row 8
+row_header_1 <- c(row_header_1, "Anziani esposti esposti a prescrizioni a rischio di interazioni farmaco-farmaco")
+j <-  add_empty_row(j)
+
+# row 8
+row_header_1 <- c(row_header_1, "Pazienti politrattati esposti, n (%)")
+j <-  add_empty_row(j)
 
 # row 10
-row_header_1 <- c(row_header_1, "Reumatologica")
-j <- descriptive_N_perc(j, "reumatologica_")
+row_header_1 <- c(row_header_1, "Anticoagulante orale + FANS (e.g. Warfarin/DOAC
+                                 + FANS + diclofenc)")
+j <- descriptive_N_perc(j, "anticoag_fans_")
 
 # row 11
-row_header_1 <- c(row_header_1, "Gastroenterologica")
-j <- descriptive_N_perc(j, "gastroenterologica_")
+row_header_1 <- c(row_header_1, "≥3 farmaci con effetto anticolinergico (i.e. 
+                                 burden anticolinergico cumulativo)")
+j <- descriptive_N_perc(j, "anticol_atleast_3_")
 
 # row 12
-row_header_1 <- c(row_header_1, "≥1 esenzione per qualsiasi malattia cronica")
-j <- descriptive_N_perc(j, "esenzione_qualsiasi_")
+row_header_1 <- c(row_header_1, "ACE-inibitore/ARB + FANS + diuretico (Triplice 
+                                 whammy)")
+j <- descriptive_N_perc(j, "ace_fans_diur_")
 
-# row 13
-row_header_1 <- c(row_header_1, "Principi attivi più utilizzati (ATC V livello dispensati ≥ 3 volte in un anno)")
-j <- add_empty_row(j)
-
-# row 14
-row_header_1 <- c(row_header_1, "1")
-j <- descriptive_N_perc_variante(j, "farmaco_piu_utilizzato_1_")
-
-# row 15
-row_header_1 <- c(row_header_1, "2")
-j <- descriptive_N_perc_variante(j, "farmaco_piu_utilizzato_2_")
-
-# row 16
-row_header_1 <- c(row_header_1, "3")
-j <- descriptive_N_perc_variante(j, "farmaco_piu_utilizzato_3_")
-
-# row 17
-row_header_1 <- c(row_header_1, "4")
-j <- descriptive_N_perc_variante(j, "farmaco_piu_utilizzato_4_")
-
-# row 18
-row_header_1 <- c(row_header_1, "5")
-j <- descriptive_N_perc_variante(j, "farmaco_piu_utilizzato_5_")
-
-# row 19
-row_header_1 <- c(row_header_1, "Combinazioni ATC IV livello (*)")
-j <- add_empty_row(j)
-
-# row 20
-row_header_1 <- c(row_header_1, "1")
-j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_1_")
-
-# row 21
-row_header_1 <- c(row_header_1, "2")
-j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_2_")
-
-# row 22
-row_header_1 <- c(row_header_1, "3")
-j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_3_")
-
-# row 23
-row_header_1 <- c(row_header_1, "4")
-j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_4_")
-
-# row 24
-row_header_1 <- c(row_header_1, "5")
-j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_5_")
-
+# row 12
+row_header_1 <- c(row_header_1, "Antiaggregante + FANS (senza PPI) (e.g. 
+                                 Aspirina + diclofenc)")
+j <- descriptive_N_perc(j, "antiagg_fans_")
 
 
 #########################################
@@ -282,7 +256,7 @@ tab_nice[1] <- lapply(tab_nice[1], function(x) {
 # SAVE
 
 outputfile <- tab_nice
-nameoutput <- "D6_Table_3"
+nameoutput <- "D6_Table_7"
 assign(nameoutput, outputfile)
 
 # rds

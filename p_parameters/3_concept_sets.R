@@ -31,16 +31,16 @@ name_codelist[[""]] <- ""
 
 # farmaci potenzialmente inappropriati e interazioni farmaco-farmaco (criteri Beers)
 name_codelist[["med_anticol"]] <- "Anticolinergici (Table S2 of the protocol)"
-name_codelist[["med_fans"]] <- "FANS orali (Table S2 of the protocol)"
+name_codelist[["med_fans"]] <- "FANS orali e Medicines contributing to the algorithm on anticoag_fans (Table S2 of the protocol)"
 name_codelist[["med_antipsico"]] <- "Antipsicotici (Table S2 of the protocol)"
 name_codelist[["med_sulfo"]] <- "Sulfoniluree a lunga durata (Table S2 of the protocol)"
 name_codelist[["med_digo"]] <- "Digossina >0,125 mg/die (Table S2 of the protocol)"
-name_codelist[["med_sci_insul"]] <- "Scivolatori insulinici (Table S2 of the protocol)"
+name_codelist[["med_ins_rapida"]] <- "Medicines contributing to the algorithm on sci_insul (Table S2 of the protocol)"
+name_codelist[["med_ins_lunga"]] <- "Medicines contributing to the algorithm on sci_insul (Table S2 of the protocol)"
 name_codelist[["med_ppi"]] <- "Inibitori di pompa protonica (PPI) (Table S2 of the protocol)"
-name_codelist[["med_anticoag_fans"]] <- "Anticoagulante orale + FANS (Table S2 of the protocol)"
-name_codelist[["med_anticol_atleast_3"]] <- "≥3 farmaci con effetto anticolinergico (Table S2 of the protocol)"
-name_codelist[["med_ace_fans_diur"]] <- "ACE-inibitore/ARB + FANS + diuretico (Table S2 of the protocol)"
-name_codelist[["med_antiagg_fans"]] <- "Antiaggregante + FANS (Table S2 of the protocol)"
+name_codelist[["med_anticoag"]] <- "Medicines contributing to the algorithm on anticoag_fans (Table S2 of the protocol)"
+
+
 
 
 
@@ -167,11 +167,15 @@ concept_set_codes_our_study[["med_antipsico"]][["ATC"]] <- c("N05AA01", "N05AA02
 concept_set_codes_our_study[["med_sulfo"]][["ATC"]] <- c("A10BB01", "A10BB02", 
                                                          "A10BB09", "A10BB12")
 
-name_codelist[["med_sci_insul"]] <- c()
+name_codelist[["med_ins_rapida"]] <- c("A10AB")
+name_codelist[["med_ins_lunga"]] <- c("A10AC", "A10AD", "A10AE", "A10AF")
 
 name_codelist[["med_ppi"]] <- c("A02BC01", "A02BC02", "A02BC03", "A02BC04", 
                                 "A02BC05", "A02BC06", "A02BC51", "A02BC53", 
                                 "A02BC54")
+
+name_codelist[["med_anticoag"]] <- c("B01AA", "B01AE05" , "B01AE07", "B01AF01",
+                                     "B01AF02", "B01AF03", "B01AF04")
 
 
 

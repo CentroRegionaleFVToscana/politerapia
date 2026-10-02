@@ -116,28 +116,20 @@ for (k in asl) {
   setnames(tab_nice, "cell", paste0("cell_", j))
   
   # row 2
-  row_header_1 <- c(row_header_1, "Combinazioni ATC IV livello (*)")
+  row_header_1 <- c(row_header_1, "Combinazioni di ≥5 ATC IV livello (*)")
   j <- add_empty_row(j)
-  
-  # row 3
-  #row_header_1 <- c(row_header_1, "N pazienti")
-  # j <- add_empty_row(j)
-  # 
-  # # row 4
-  # row_header_1 <- c(row_header_1, "% sul totale in politerapia")
-  # j <- add_empty_row(j)
-  
+
   # row 5
   row_header_1 <- c(row_header_1, "1")
-  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_1_")
+  j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_1_")
   
   # row 6
   row_header_1 <- c(row_header_1, "2")
-  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_2_")
+  j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_2_")
   
   # row 7
   row_header_1 <- c(row_header_1, "3")
-  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_3_")
+  j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_3_")
   
   # row 8
   row_header_1 <- c(row_header_1, "4")
@@ -145,35 +137,71 @@ for (k in asl) {
   
   # row 9
   row_header_1 <- c(row_header_1, "5")
-  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_5_")
+  j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_5_")
   
   # row 10
   row_header_1 <- c(row_header_1, "6")
-  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_6_")
-  
-  # row 11
-#  if (length(variable_names_full[[k]])>=7){
-#    row_header_1 <- c(row_header_1, variable_names_full[[k]][7])
-#    j <- descriptive_N_perc(j, paste0(variable_names_full[[k]][7], "_"))
-#  }
+  j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_6_")
 
   # row 12
   row_header_1 <- c(row_header_1, "7")
-  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_7_")
+  j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_7_")
 
   # row 13
   row_header_1 <- c(row_header_1, "8")
-  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_8_")
+  j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_8_")
   
   # row 14
   row_header_1 <- c(row_header_1, "9")
-  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_9_")
+  j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_9_")
   
   # row 15
   row_header_1 <- c(row_header_1, "10")
-  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_10_")
+  j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_10_")
   
+  # row 2
+  row_header_1 <- c(row_header_1, "Combinazioni di ≥10 ATC IV livello (*)")
+  j <- add_empty_row(j)
   
+  # row 5
+  row_header_1 <- c(row_header_1, "1")
+  j <- descriptive_N_perc_variante(j, "combinazione_10_piu_utilizzata_1_")
+  
+  # row 6
+  row_header_1 <- c(row_header_1, "2")
+  j <- descriptive_N_perc_variante(j, "combinazione_10_piu_utilizzata_2_")
+  
+  # row 7
+  row_header_1 <- c(row_header_1, "3")
+  j <- descriptive_N_perc_variante(j, "combinazione_10_piu_utilizzata_3_")
+  
+  # row 8
+  row_header_1 <- c(row_header_1, "4")
+  j <- descriptive_N_perc_variante(j, "combinazione_10_piu_utilizzata_4_")
+  
+  # row 9
+  row_header_1 <- c(row_header_1, "5")
+  j <- descriptive_N_perc_variante(j, "combinazione_10_piu_utilizzata_5_")
+  
+  # row 10
+  row_header_1 <- c(row_header_1, "6")
+  j <- descriptive_N_perc_variante(j, "combinazione_10_piu_utilizzata_6_")
+
+  # row 12
+  row_header_1 <- c(row_header_1, "7")
+  j <- descriptive_N_perc_variante(j, "combinazione_10_piu_utilizzata_7_")
+  
+  # row 13
+  row_header_1 <- c(row_header_1, "8")
+  j <- descriptive_N_perc_variante(j, "combinazione_10_piu_utilizzata_8_")
+  
+  # row 14
+  row_header_1 <- c(row_header_1, "9")
+  j <- descriptive_N_perc_variante(j, "combinazione_10_piu_utilizzata_9_")
+  
+  # row 15
+  row_header_1 <- c(row_header_1, "10")
+  j <- descriptive_N_perc_variante(j, "combinazione_10_piu_utilizzata_10_")
   
   #########################################
   # KEEP CELLS
