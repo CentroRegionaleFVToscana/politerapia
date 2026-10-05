@@ -1,7 +1,7 @@
 ###################################################################
 # DESCRIBE THE CONCEPT SETS
 ###################################################################
-concept_sets_of_our_study_drugs <- c("med_anticol", "med_fans", "med_antipsico", "med_sulfo", "med_digo", "med_ins_rapida", "med_ins_lunga","med_ppi", "med_anticoag", "med_acearb", "med_diur", "med_bloccal", "med_altre_comb", "med_antiagg")
+concept_sets_of_our_study_drugs <- c("med_anticol", "med_fans", "med_antipsico", "med_sulfo", "med_digo", "med_ins_rapida", "med_ins_lunga","med_ppi", "med_anticoag", "med_acearb", "med_diur", "med_comb_acearb_diur", "med_comb_acearb_bloccal", "med_comb_acearb_other", "med_antiagg")
 
 # "med_iperten", "med_cardioisc_angi", "med_dislip", "med_diab", "med_RENDIS_Alg1_1", "med_RENDIS_Alg1_2", "med_RENDIS_Alg1_3", "med_RENDIS_Alg2", "med_cortic", "med_antiang", "med_antitromb",  "med_bifos"
 
@@ -183,26 +183,13 @@ concept_set_codes_our_study[["med_acearb"]][["ATC"]]  <- c("C09AA", "C09CA")
 
 concept_set_codes_our_study[["med_diur"]][["ATC"]]  <- c("C03AA", "C03AB", "C03AH,C03AX", "C03BA", "C03CA", "C03CB", "C03DA", "C03EA", "C03EB", "C03XA ")
 
-concept_set_codes_our_study[["med_bloccal"]][["ATC"]]  <- c("C09BB", "C09DB")  
+concept_set_codes_our_study[["med_comb_acearb_diur"]][["ATC"]]  <- c("C09BA", "C09DA")
 
-concept_set_codes_our_study[["med_altre_comb"]][["ATC"]]  <- c( "C09BX", "C09DX") 
+concept_set_codes_our_study[["med_comb_acearb_bloccal"]][["ATC"]]  <- c("C09BB", "C09DB")  
+
+concept_set_codes_our_study[["med_comb_acearb_other"]][["ATC"]]  <- c( "C09BX", "C09DX") 
 concept_set_codes_our_study[["med_antiagg"]][["ATC"]]  <- c( "B01AC") 
 
-
-# 
-# concept_set_codes_our_study[["med_iperten"]][["ATC"]] <- c("C09", "C02", "C07", "C08C")
-# concept_set_codes_our_study[["med_cardioisc_angi"]][["ATC"]] <- "C01DA"
-# concept_set_codes_our_study[["med_dislip"]][["ATC"]] <- "C10"
-# concept_set_codes_our_study[["med_diab"]][["ATC"]] <- "A10"
-# concept_set_codes_our_study[["med_RENDIS_Alg1_1"]][["ATC"]] <- c("C09C")
-# concept_set_codes_our_study[["med_RENDIS_Alg1_2"]][["ATC"]] <- c("C09B")
-# concept_set_codes_our_study[["med_RENDIS_Alg1_3"]][["ATC"]] <- c("M04AA01")
-# concept_set_codes_our_study[["med_RENDIS_Alg2"]][["ATC"]] <- c("B03XA01", "V03AE03", "V03AE02", "V03AE01", "H05BX02", "B03XA02", "H05BX01")
-# concept_set_codes_our_study[["med_bifos"]][["ATC"]] <- c()
-# concept_set_codes_our_study[[""]][["ATC"]] <- c()
-# concept_set_codes_our_study[[""]][["ATC"]] <- c()
-# concept_set_codes_our_study[[""]][["ATC"]] <- c()
-# 
 
 
 concept_set_codes_our_study[["ese_cardio"]][["CODESE"]] <- c("0A02", "021", "0A31", "0031")

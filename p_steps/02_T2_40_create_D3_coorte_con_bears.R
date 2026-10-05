@@ -172,7 +172,7 @@ processing[is.na(rsa_adi), rsa_adi := 0]
 # 
 # processing <- processing[, ..tokeep]
 
-nameoutputfile <- paste0("D3_coorte_con_caratterizzazione_", i, ".rds")
+nameoutputfile <- paste0("D3_coorte_con_bears_", i, ".rds")
 
 saveRDS(processing, file = file.path(thisdiroutput, nameoutputfile))
 
