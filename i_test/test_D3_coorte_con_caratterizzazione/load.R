@@ -38,7 +38,7 @@ listdatasetsRData <- c(unique(c(allingredients, "med_digo", "med_acearb", "med_d
 listdatasetscsv <- c("spf2025", "fed2025")
 
 
-listdatasets <- c("D3_coorte_2025",  "D3_RSA_ADI", listdatasetsRData, listdatasetscsv)
+listdatasets <- c("D3_coorte_2025", "D3_coorte_con_bears_2025",  "D3_RSA_ADI", listdatasetsRData, listdatasetscsv)
 
 # dates variables 
 

@@ -1,5 +1,9 @@
 # author: Rosa Gini
 
+# v 1.0 6 Oct 2026
+
+# aggiunte variabili Bears
+
 # v 1.0 22 Sep 2026
 
 #########################################
@@ -37,6 +41,7 @@ setnames(medicines, c("id","datasped"),c("person_id", "DATE"))
 # load data
 
 processing <- readRDS(file.path(thisdirinput, paste0("D3_coorte_", i, ".rds")))
+bears <- readRDS(file.path(thisdirinput, paste0("D3_coorte_con_bears_", i, ".rds")))
 
 # index_date
 
@@ -164,6 +169,10 @@ processing <- rsa[
 
 processing[, c("start_d", "end_d") := NULL]  
 processing[is.na(rsa_adi), rsa_adi := 0]
+
+# add bears
+
+processing <- merge(processing, bears, by = "person_id", all.x = T)
 
 
 # clean and save
