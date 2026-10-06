@@ -44,7 +44,7 @@ listdatasets <- c("D3_coorte_2025",  listdatasetsRData, listdatasetscsv)
 
 listdates <- list()
 listdates[["D3_coorte_2025"]] <- c("birth_date", "start_study_op","end_study_op")
-for (dataset in allingredients) {
+for (dataset in  listdatasetsRData){
   listdates[[dataset]] <- c("DATE")
 }
 
@@ -57,6 +57,8 @@ for (dataset in listdatasetscsv) {
   listdates[[dataset]] <- c("datasped")
   
 }
+
+
 
 
 # date baseline
