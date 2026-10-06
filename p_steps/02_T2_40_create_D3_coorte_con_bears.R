@@ -92,6 +92,7 @@ component <- "ese_cardio"
 # compute all 'simple' variables
 
 for (component in component_variables) {
+  print(component)
   processing[, (component) := 0]
   ingredients <- unlist(unique(parameters_this_step[parameter == component,.(value)]))
   for (ingredient in ingredients) {
