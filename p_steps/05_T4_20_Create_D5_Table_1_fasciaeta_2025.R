@@ -64,12 +64,17 @@ for (j in fasce_eta) {
   temp[, ord := seq(.N), by = asl]
   temp <- temp[ord <= 5, ]
   
+  # aggancio la descrizione del farmaco
+  descr_farmaci <- readRDS(file = paste0(thisdirinput, "/descr_farmaci.rds"))
+  
+  temp <- merge(temp, descr_farmaci, by.x = "atc", by.y = "farmaco_5_atc", all.x = T)
+  
   wide <- dcast(temp, 
                 asl ~ ord, 
-                value.var = c("atc", "N")
+                value.var = c("farmaco_5_descr", "N")
                 )
   
-  setnames(wide, sub("^atc_(\\d+)$", "farmaco_piu_utilizzato_\\1", names(wide)))
+  setnames(wide, sub("^farmaco_5_descr_(\\d+)$", "farmaco_piu_utilizzato_\\1", names(wide)))
   setnames(wide, sub("^N_(\\d+)$", "farmaco_piu_utilizzato_\\1_N", names(wide)))
   
 
