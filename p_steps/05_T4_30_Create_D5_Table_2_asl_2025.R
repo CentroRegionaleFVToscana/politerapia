@@ -69,6 +69,22 @@ res <- res[ord <= 10, ]
 
 res[, combo := gsub(",", " ", gsub("[{}]", "", combo))]
 
+# load drug description
+descr_farmaci <- readRDS(file = paste0(thisdirinput, "/descr_farmaci.rds"))
+atc4 <- unique(descr_farmaci[, .(farmaco_4_atc, farmaco_4_descr)])
+
+# metto in long gli atc delle combinazioni più frequenti
+res[, row_id := .I]
+long <- res[, .(atc = unlist(strsplit(trimws(combo), "\\s+"))), by = row_id]
+long <- unique(long, by = "atc")
+long <- merge(long, atc4,
+              by.x = "atc", by.y = "farmaco_4_atc",
+              all.x = TRUE)
+agg <- long[, .(combo_descr = paste(farmaco_4_descr, collapse = " ")), by = row_id]
+res <- merge(res, agg, by = "row_id", all.x = TRUE)
+res[, row_id := NULL]
+
+
 # create 10 most frequent combinations of at least 10 ATC IV level
 res_10 <- temp[, {
   trans <- as(split(atc_IV, person_id), "transactions")
@@ -90,6 +106,17 @@ res_10 <- res_10[ord <= 10, ]
 
 res_10[, combo := gsub(",", " ", gsub("[{}]", "", combo))]
 
+# metto in long gli atc delle combinazioni più frequenti
+res_10[, row_id := .I]
+long <- res_10[, .(atc = unlist(strsplit(trimws(combo), "\\s+"))), by = row_id]
+long <- unique(long, by = "atc")
+long <- merge(long, atc4,
+              by.x = "atc", by.y = "farmaco_4_atc",
+              all.x = TRUE)
+agg <- long[, .(combo_descr = paste(farmaco_4_descr, collapse = " ")), by = row_id]
+res_10 <- merge(res_10, agg, by = "row_id", all.x = TRUE)
+res_10[, row_id := NULL]
+
 
 # create D5
 D5 <- data[, .N, asl]
@@ -97,10 +124,10 @@ D5 <- data[, .N, asl]
 
 wide <- dcast(res, 
               asl ~ ord, 
-              value.var = c("combo", "N", "p")
+              value.var = c("combo_descr", "N", "p")
 )
 
-setnames(wide, sub("^combo_(\\d+)$", "combinazione_5_piu_utilizzata_\\1", names(wide)))
+setnames(wide, sub("^combo_descr_(\\d+)$", "combinazione_5_piu_utilizzata_\\1", names(wide)))
 setnames(wide, sub("^N_(\\d+)$", "combinazione_5_piu_utilizzata_\\1_N", names(wide)))
 setnames(wide, sub("^p_(\\d+)$", "combinazione_5_piu_utilizzata_\\1_p", names(wide)))
 
@@ -108,10 +135,10 @@ D5 <- merge(D5, wide, by = "asl")
 
 wide <- dcast(res_10, 
               asl ~ ord, 
-              value.var = c("combo", "N", "p")
+              value.var = c("combo_descr", "N", "p")
 )
 
-setnames(wide, sub("^combo_(\\d+)$", "combinazione_10_piu_utilizzata_\\1", names(wide)))
+setnames(wide, sub("^combo_descr_(\\d+)$", "combinazione_10_piu_utilizzata_\\1", names(wide)))
 setnames(wide, sub("^N_(\\d+)$", "combinazione_10_piu_utilizzata_\\1_N", names(wide)))
 setnames(wide, sub("^p_(\\d+)$", "combinazione_10_piu_utilizzata_\\1_p", names(wide)))
 

@@ -100,7 +100,20 @@ res[, tot_pazienti := NULL]
 
 #res[, combo := gsub(",", " ", gsub("[{}]", "", combo))]
 
+# load drug description
+descr_farmaci <- readRDS(file = paste0(thisdirinput, "/descr_farmaci.rds"))
+atc4 <- unique(descr_farmaci[, .(farmaco_4_atc, farmaco_4_descr)])
 
+# metto in long gli atc delle combinazioni più frequenti
+res[, row_id := .I]
+long <- res[, .(atc = unlist(strsplit(trimws(combo), "\\s+"))), by = row_id]
+long <- unique(long, by = "atc")
+long <- merge(long, atc4,
+              by.x = "atc", by.y = "farmaco_4_atc",
+              all.x = TRUE)
+agg <- long[, .(combo_descr = paste(farmaco_4_descr, collapse = " ")), by = row_id]
+res <- merge(res, agg, by = "row_id", all.x = TRUE)
+res[, row_id := NULL]
 
 
 # # Create D5 with sociodemographic characteristics
@@ -133,12 +146,18 @@ setorder(temp, asl, - N)
 temp[, ord := seq(.N), by = asl]
 temp <- temp[ord <= 5, ]
 
+# aggancio la descrizione del farmaco
+descr_farmaci <- readRDS(file = paste0(thisdirinput, "/descr_farmaci.rds"))
+
+temp <- merge(temp, descr_farmaci, by.x = "atc", by.y = "farmaco_5_atc", all.x = T)
+
+
 wide <- dcast(temp, 
               asl ~ ord, 
-              value.var = c("atc", "N")
+              value.var = c("farmaco_5_descr", "N")
 )
 
-setnames(wide, sub("^atc_(\\d+)$", "farmaco_piu_utilizzato_\\1", names(wide)))
+setnames(wide, sub("^farmaco_5_descr_(\\d+)$", "farmaco_piu_utilizzato_\\1", names(wide)))
 setnames(wide, sub("^N_(\\d+)$", "farmaco_piu_utilizzato_\\1_N", names(wide)))
 
 # create D5
@@ -164,10 +183,10 @@ for (k in 1:5) {
 # # extract 5 most frequent combinations of ATC IV level
 wide_comb <- dcast(res, 
               asl ~ ord, 
-              value.var = c("combo", "N", "p")
+              value.var = c("combo_descr", "N", "p")
 )
 
-setnames(wide_comb, sub("^combo_(\\d+)$", "combinazione_5_piu_utilizzata_\\1", names(wide_comb)))
+setnames(wide_comb, sub("^combo_descr_(\\d+)$", "combinazione_5_piu_utilizzata_\\1", names(wide_comb)))
 setnames(wide_comb, sub("^N_(\\d+)$", "combinazione_5_piu_utilizzata_\\1_N", names(wide_comb)))
 setnames(wide_comb, sub("^p_(\\d+)$", "combinazione_5_piu_utilizzata_\\1_p", names(wide_comb)))
 

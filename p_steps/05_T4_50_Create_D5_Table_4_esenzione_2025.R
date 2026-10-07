@@ -55,6 +55,10 @@ atc_IV_long[, `:=`(atc_IV=NULL,
 atc_IV_long[, n_comb := lengths(strsplit(trimws(comb_ord), "\\s+"))]
 atc_IV_long <- atc_IV_long[n_comb>=5 ,]
 
+# load drug description
+descr_farmaci <- readRDS(file = paste0(thisdirinput, "/descr_farmaci.rds"))
+atc4 <- unique(descr_farmaci[, .(farmaco_4_atc, farmaco_4_descr)])
+
 
 #toadd <- copy(data)[, asl := "Tutte"]
 #data <- rbind(data, toadd)
@@ -109,6 +113,18 @@ for (j in esenzioni) {
   res[, p := round(100 * N / tot_pazienti, 1)]
   res[, tot_pazienti := NULL]
   
+
+  # metto in long gli atc delle combinazioni più frequenti
+  res[, row_id := .I]
+  long <- res[, .(atc = unlist(strsplit(trimws(combo), "\\s+"))), by = row_id]
+  long <- unique(long, by = "atc")
+  long <- merge(long, atc4,
+                by.x = "atc", by.y = "farmaco_4_atc",
+                all.x = TRUE)
+  agg <- long[, .(combo_descr = paste(farmaco_4_descr, collapse = " ")), by = row_id]
+  res <- merge(res, agg, by = "row_id", all.x = TRUE)
+  res[, row_id := NULL]
+  
   
   # Create D5 with sociodemographic characteristics
   D5_nocov <- data_new_comb[, .(
@@ -140,12 +156,18 @@ for (j in esenzioni) {
   temp[, ord := seq(.N), by = asl]
   temp <- temp[ord <= 5, ]
   
+  # aggancio la descrizione del farmaco
+  descr_farmaci <- readRDS(file = paste0(thisdirinput, "/descr_farmaci.rds"))
+  
+  temp <- merge(temp, descr_farmaci, by.x = "atc", by.y = "farmaco_5_atc", all.x = T)
+  
+  
   wide <- dcast(temp, 
                 asl ~ ord, 
-                value.var = c("atc", "N")
+                value.var = c("farmaco_5_descr", "N")
   )
   
-  setnames(wide, sub("^atc_(\\d+)$", "farmaco_piu_utilizzato_\\1", names(wide)))
+  setnames(wide, sub("^farmaco_5_descr_(\\d+)$", "farmaco_piu_utilizzato_\\1", names(wide)))
   setnames(wide, sub("^N_(\\d+)$", "farmaco_piu_utilizzato_\\1_N", names(wide)))
   
   
@@ -167,10 +189,10 @@ for (j in esenzioni) {
   
   wide <- dcast(res, 
                 asl ~ ord, 
-                value.var = c("combo", "N", "p")
+                value.var = c("combo_descr", "N", "p")
   )
   
-  setnames(wide, sub("^combo_(\\d+)$", "combinazione_5_piu_utilizzata_\\1", names(wide)))
+  setnames(wide, sub("^combo_descr_(\\d+)$", "combinazione_5_piu_utilizzata_\\1", names(wide)))
   setnames(wide, sub("^N_(\\d+)$", "combinazione_5_piu_utilizzata_\\1_N", names(wide)))
   setnames(wide, sub("^p_(\\d+)$", "combinazione_5_piu_utilizzata_\\1_p", names(wide)))
   
