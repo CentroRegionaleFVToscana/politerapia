@@ -4,7 +4,7 @@
 
 # v 1.0
 
-# 20 Sep 2026
+# 26 Aug 2026
 
 #########################################
 
@@ -22,8 +22,9 @@ if (TEST){
 
 processing <- fread(file.path(thisdirinput,"MISURE_TD.csv"))
 
-setnames(processing,c("id", "ini_record", "fine_record"),c("person_id", "start_d", "end_d"))
+setnames(processing,c("id", "datanas", "ini_record", "fine_record"),c("person_id", "birth_date","start_d", "end_d"))
 
+processing[, birth_date := ymd(birth_date)]
 processing[, start_d := ymd(start_d)]
 processing[, end_d := ymd(end_d)]
 
@@ -33,20 +34,19 @@ processing <- processing[start_d <= study_end_date & end_d >= study_start_date,]
 
 # asl
 
-processing <- processing[misura == "ASL",]
 processing[, ASL := fcase(
   valore == 1, "CE",
   valore == 2, "NO",
   valore == 3, "SE"
 )]
 
-# remove records with no ASL
+# remove recrods with no ASL
 
 processing <- processing[!is.na(ASL),]
-    
+
 # clean and save
 
-tokeep <- c("person_id", "start_d", "end_d", "ASL")
+tokeep <- c("person_id", "start_d", "end_d", "ASL", "birth_date")
 
 processing <- processing[, ..tokeep]
 
