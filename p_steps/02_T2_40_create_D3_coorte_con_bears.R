@@ -29,6 +29,7 @@ component_variables <- unlist(unique(parameters_this_step[parameter == "componen
 # return the dataset of all pairs (or triplets) that have all records within xxx days the one from the other, default: 15 days
 
 find_close_records <- function(dts, max_days = 15L) {
+
   stopifnot(is.list(dts), length(dts) %in% 2:3)
   
   # copia pulita: una riga per (person_id, data)
@@ -71,6 +72,55 @@ find_close_records <- function(dts, max_days = 15L) {
               date3 = x.date3),
             nomatch = NULL, 
             allow.cartesian = TRUE]
+  out[]
+}
+
+find_close_records_without_one <- function(dts, max_days = 15L) {
+
+  stopifnot(is.list(dts), length(dts) %in% 2:3)
+  
+  # copia pulita: una riga per (person_id, data)
+  prep <- lapply(dts, function(d) {
+    unique(as.data.table(d)[, .(person_id, DATE = as.IDate(DATE))])
+  })
+  
+  # --- coppia: date2 entro +-max_days da date1 ---
+  a <- prep[[1]]
+  setnames(a, "DATE", "date1")
+  a[, `:=`(lo = date1 - max_days, hi = date1 + max_days)]
+  
+  b <- prep[[2]]
+  setnames(b, "DATE", "date2")
+  
+  out <- b[a, on = .(person_id, 
+                     date2 >= lo, 
+                     date2 <= hi),
+           .(person_id, 
+             date1 = i.date1, 
+             date2 = x.date2),
+           nomatch = NULL, 
+           allow.cartesian = TRUE]
+  
+  if (length(prep) == 2L) return(out[])
+  
+  # --- tripletta: date3 deve stare entro max_days da ENTRAMBE le altre ---
+  out[, `:=`(lo = pmax(date1, date2) - max_days,
+             hi = pmin(date1, date2) + max_days)]
+  
+  c3 <- prep[[3]]
+  setnames(c3, "DATE", "date3")
+  
+  C <- c3[out, on = .(person_id, 
+                        date3 >= lo, 
+                        date3 <= hi),
+            .(person_id, 
+              date1 = i.date1, 
+              date2 = i.date2, 
+              date3 = x.date3),
+            nomatch = NULL, 
+            allow.cartesian = TRUE]
+  
+  out <- unique(C[, .(person_id, date1, date2)])
   out[]
 }
 
@@ -227,7 +277,7 @@ processing[is.na(get(varname)), (varname) := 0]
 ###########################
 # for wammy variables: load all the needed datasets
 
-for (ingredient in c("med_acearb","med_fans","med_diur", "med_comb_acearb_diur", "med_comb_acearb_other","med_comb_acearb_bloccal", "med_antiagg")) {
+for (ingredient in c("med_acearb","med_fans","med_diur", "med_comb_acearb_diur", "med_comb_acearb_other","med_comb_acearb_bloccal", "med_antiagg", "med_ppi")) {
   temp <- as.data.table(get(load(file.path(thisdirinput, paste0(ingredient,".RData")))[[1]]))
   setnames(temp, "ID", "person_id")
   temp[, person_id := as.character(person_id)]
@@ -306,11 +356,10 @@ processing[, (varname) := fifelse((whammy_1 + whammy_2 + whammy_3 + whammy_4) > 
 
 
 ###########################
-# antiagg_fans	≥1 FANS e un antiaggregante dispensati durante un massimo di 15 giorni l’uno dall’altro	
-
+# antiagg_fans	≥1 FANS e un antiaggregante dispensati durante un massimo di 15 giorni l’uno dall’altro	senza un PPI nello stesso intervello
 
 varname <- "antiagg_fans"
-temp <- find_close_records(list(med_antiagg, med_fans))
+temp <- find_close_records_without_one(list(med_antiagg, med_fans, med_ppi))
 
 temp <- unique(temp[, .(person_id)])
 temp[, (varname) := 1]
