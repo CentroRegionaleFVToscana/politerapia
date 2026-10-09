@@ -42,36 +42,61 @@ atc_IV_long[, atc_IV:=substring(atc, 1, 5)]
 atc_IV_long <- unique(atc_IV_long, by = c("person_id", "atc_IV"))
 atc_IV_long[, atc:=NULL]
 
+# create combinations of ATC IV level
+atc_IV_long[, comb_atc_IV := paste(atc_IV, collapse = " "), person_id]
+
+# order alphabetically
+
+atc_IV_long[, comb_ord := vapply(
+  strsplit(trimws(comb_atc_IV), "\\s+"),
+  function(x) paste(sort(x, method = "radix"), collapse = " "),
+  character(1)
+)]
+
+atc_IV_long <- unique(atc_IV_long, by = c("person_id", "comb_ord"))
+atc_IV_long[, `:=`(atc_IV = NULL, comb_atc_IV = NULL)]
+
+atc_IV_long[, n_comb := lengths(strsplit(trimws(comb_ord), "\\s+"))]
 
 toadd <- copy(data)[, asl := "Tutte"]
 data <- rbind(data, toadd)
 
 temp <- merge(atc_IV_long, data[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
 
+tot_asl <- data[, .(tot_pazienti = .N), by = asl]
+
 # create 10 most frequent combinations of at least 5 different ATC IV level
-res <- temp[, {
-  trans <- as(split(atc_IV, person_id), "transactions")
-  fi <- eclat(trans,
-              parameter = list(supp = 0.01, minlen = 5, maxlen = 20),
-              control   = list(verbose = FALSE))
-  
-  if (length(fi) == 0) NULL else {
-    top5 <- head(sort(fi, by = "support"), 10)
-    .(combo = labels(top5),
-      N     = round(quality(top5)$support * length(trans)),
-      p  = round(100 * quality(top5)$support, 1))
-  }
-}, by = asl]
+#res <- temp[, {
+#  trans <- as(split(atc_IV, person_id), "transactions")
+#  fi <- eclat(trans,
+#            parameter = list(supp = 0.01, minlen = 5, maxlen = 20),
+#              control   = list(verbose = FALSE))
+#  
+#  if (length(fi) == 0) NULL else {
+#    top5 <- head(sort(fi, by = "support"), 10)
+#    .(combo = labels(top5),
+#      N     = round(quality(top5)$support * length(trans)),
+#      p  = round(100 * quality(top5)$support, 1))
+#  }
+#}, by = asl]
 
-setorder(res, asl, - N)
-res[, ord := seq(.N), by = asl]
-res <- res[ord <= 10, ]
 
-res[, combo := gsub(",", " ", gsub("[{}]", "", combo))]
+#res[, combo := gsub(",", " ", gsub("[{}]", "", combo))]
 
 # load drug description
 descr_farmaci <- readRDS(file = paste0(thisdirinput, "/descr_farmaci.rds"))
 atc4 <- unique(descr_farmaci[, .(farmaco_4_atc, farmaco_4_descr)])
+
+temp_5<-temp[n_comb >= 5]
+res <- temp_5[, .N, by = .(asl, comb_ord)] 
+setorder(res, asl, - N)
+res[, ord := seq(.N), by = asl]
+res <- res[ord <= 10, ]
+
+setnames(res, "comb_ord", "combo")
+res <- merge(res, tot_asl, by = "asl", all.x = TRUE)
+res[, p := round(100 * N / tot_pazienti, 1)]
+res[, tot_pazienti := NULL]
 
 # metto in long gli atc delle combinazioni più frequenti
 res[, row_id := .I]
@@ -85,36 +110,44 @@ res <- merge(res, agg, by = "row_id", all.x = TRUE)
 res[, row_id := NULL]
 
 
-# create 10 most frequent combinations of at least 10 ATC IV level
-res_10 <- temp[, {
-  trans <- as(split(atc_IV, person_id), "transactions")
-  fi <- eclat(trans,
-              parameter = list(supp = 0.01, minlen = 10, maxlen = 20),
-              control   = list(verbose = FALSE))
-  
-  if (length(fi) == 0) NULL else {
-    top5 <- head(sort(fi, by = "support"), 10)
-    .(combo = labels(top5),
-      N     = round(quality(top5)$support * length(trans)),
-      p  = round(100 * quality(top5)$support, 1))
-  }
-}, by = asl]
 
+# create 10 most frequent combinations of at least 10 ATC IV level
+#res_10 <- temp[, {
+#  trans <- as(split(atc_IV, person_id), "transactions")
+#  fi <- eclat(trans,
+#              parameter = list(supp = 0.01, minlen = 10, maxlen = 20),
+#              control   = list(verbose = FALSE))
+#  
+#  if (length(fi) == 0) NULL else {
+#    top5 <- head(sort(fi, by = "support"), 10)
+#    .(combo = labels(top5),
+#      N     = round(quality(top5)$support * length(trans)),
+#      p  = round(100 * quality(top5)$support, 1))
+#  }
+#}, by = asl]
+
+temp_10 <- temp[n_comb >= 10]
+res_10 <- temp_10[, .N, by = .(asl, comb_ord)]
 setorder(res_10, asl, - N)
 res_10[, ord := seq(.N), by = asl]
 res_10 <- res_10[ord <= 10, ]
 
-res_10[, combo := gsub(",", " ", gsub("[{}]", "", combo))]
+setnames(res_10, "comb_ord", "combo")
+res_10 <- merge(res_10, tot_asl, by = "asl", all.x = TRUE)
+res_10[, p := round(100 * N / tot_pazienti, 1)]
+res_10[, tot_pazienti := NULL]
+
+#res_10[, combo := gsub(",", " ", gsub("[{}]", "", combo))]
 
 # metto in long gli atc delle combinazioni più frequenti
 res_10[, row_id := .I]
-long <- res_10[, .(atc = unlist(strsplit(trimws(combo), "\\s+"))), by = row_id]
-long <- unique(long, by = "atc")
-long <- merge(long, atc4,
+long_10 <- res_10[, .(atc = unlist(strsplit(trimws(combo), "\\s+"))), by = row_id]
+long_10 <- unique(long_10, by = "atc")
+long_10 <- merge(long_10, atc4,
               by.x = "atc", by.y = "farmaco_4_atc",
               all.x = TRUE)
-agg <- long[, .(combo_descr = paste(farmaco_4_descr, collapse = " ")), by = row_id]
-res_10 <- merge(res_10, agg, by = "row_id", all.x = TRUE)
+agg_10 <- long_10[, .(combo_descr = paste(farmaco_4_descr, collapse = " ")), by = row_id]
+res_10 <- merge(res_10, agg_10, by = "row_id", all.x = TRUE)
 res_10[, row_id := NULL]
 
 
