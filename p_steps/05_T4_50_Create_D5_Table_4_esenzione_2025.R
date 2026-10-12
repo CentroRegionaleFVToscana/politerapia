@@ -36,13 +36,13 @@ atc_IV_long[, atc_IV:=substring(atc, 1, 5)]
 atc_IV_long <- unique(atc_IV_long, by = c("person_id", "atc_IV"))
 
 
-toadd <- copy(data_new)[, asl := "Tutte"]
-data_new <- rbind(data_new, toadd)
+toadd <- copy(data)[, asl := "Tutte"]
+data <- rbind(data, toadd)
 
-temp <- merge(atc_IV_long, data_new[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
+temp <- merge(atc_IV_long, data[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
 
 # extract most frequent combinations
-top_combos <- function(dt, k = 5, top = 5, min_supp = 0.03) {
+top_combos <- function(dt, k = 5, top = 5, min_supp = 0.01) {
   
   # browser()
   
@@ -70,7 +70,7 @@ top_combos <- function(dt, k = 5, top = 5, min_supp = 0.03) {
   setorder(dt, person_id, atc_IV)                 
   cmb <- dt[, .(combo = combn(atc_IV, k, paste, collapse = ",")), by = .(person_id, asl)]
   
-  temp <- merge(cmb, data_new[,.(person_id, asl)], by = c("person_id", "asl"), all = F, allow.cartesian = T)
+  temp <- merge(cmb, data[,.(person_id, asl)], by = c("person_id", "asl"), all = F, allow.cartesian = T)
   
   out <- temp[, .N, by = .(asl,combo)]
   
@@ -88,6 +88,12 @@ top_combos <- function(dt, k = 5, top = 5, min_supp = 0.03) {
 
 res <- top_combos(temp)
 
+# load drug description
+descr_farmaci <- readRDS(file = paste0(thisdirinput, "/descr_farmaci.rds"))
+descr_farmaci <- as.data.table(descr_farmaci)
+atc4 <- unique(descr_farmaci[, .(farmaco_4_atc, farmaco_4_descr)], by = "farmaco_4_atc")
+
+
 # metto in long gli atc delle combinazioni più frequenti
 res[, row_id := .I]
 long <- res[, .(atc = trimws(unlist(strsplit(combo, ",", fixed = TRUE)))), by = row_id]
@@ -103,12 +109,6 @@ agg <- long[, .(combo_descr = paste(farmaco_4_descr, collapse = " ")), by = row_
 res <- merge(res, agg, by = "row_id", all.x = TRUE)
 setorder(res, row_id)
 res[, row_id := NULL]
-
-
-# load drug description
-descr_farmaci <- readRDS(file = paste0(thisdirinput, "/descr_farmaci.rds"))
-descr_farmaci <- as.data.table(descr_farmaci)
-atc4 <- unique(descr_farmaci[, .(farmaco_4_atc, farmaco_4_descr)], by = "farmaco_4_atc")
 
 
 for (j in esenzioni) {
