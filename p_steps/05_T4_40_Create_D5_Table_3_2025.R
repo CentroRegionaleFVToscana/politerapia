@@ -46,77 +46,138 @@ atc_IV_long <- copy(atc_long)
 atc_IV_long[, atc_IV:=substring(atc, 1, 5)]
 atc_IV_long <- unique(atc_IV_long, by = c("person_id", "atc_IV"))
 
-atc_IV_long[, atc:=NULL]
-
-# # create combinations of ATC IV level
-atc_IV_long[, comb_atc_IV:=paste(atc_IV, collapse = " "), person_id]
-# 
-# # order alphabetically to not cosider two sequence with same values but
-# # different order as different strings
-atc_IV_long[, comb_ord := vapply(
-   strsplit(trimws(comb_atc_IV), "\\s+"),
-   function(x) paste(sort(x, method = "radix"), collapse = " "),
-   character(1)
-)]
-
-atc_IV_long <- unique(atc_IV_long, by = c("person_id", "comb_ord"))
-atc_IV_long[, `:=`(atc_IV=NULL,
-                    comb_atc_IV=NULL)]
-# # reduce to persons with combinations of at least 5 different ATC IV level
-atc_IV_long[, n_comb := lengths(strsplit(trimws(comb_ord), "\\s+"))]
-atc_IV_long <- atc_IV_long[n_comb>=5 ,]
-
-
 toadd <- copy(data_new)[, asl := "Tutte"]
 data_new <- rbind(data_new, toadd)
 
 temp <- merge(atc_IV_long, data_new[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
 
+# extract most frequent combinations
+top_combos <- function(dt, k = 5, top = 5, min_supp = 0.03) {
+  
+  # browser()
+  
+  # dt <- unique(dt[, .(person_id, atc_IV)])
+  # n_pers <- uniqueN(dt$person_id)      
+  # min_n  <- ceiling(min_supp * n_pers)
+  
+  denominatori <- dt[
+    , .(n_pers = uniqueN(person_id)),
+    by = asl
+  ]
+  denominatori[, min_n := ceiling(min_supp * n_pers)]
+  
+  freq <- dt[, .N, by = .(atc_IV, asl)]
+  
+  freq <- merge(freq, denominatori, by = "asl", all = F)
+  
+  keep <- freq[N >= min_n, .(asl, atc_IV)]
+  
+  dt <- merge(dt, keep, by = c("asl", "atc_IV"), all=F)
+  
+  dt <- dt[, if (.N >= k) .SD, by = .(person_id,asl)]
+  if (nrow(dt) == 0L) return(NULL)
+  
+  setorder(dt, person_id, atc_IV)                 
+  cmb <- dt[, .(combo = combn(atc_IV, k, paste, collapse = ",")), by = .(person_id, asl)]
+  
+  temp <- merge(cmb, data_new[,.(person_id, asl)], by = c("person_id", "asl"), all = F, allow.cartesian = T)
+  
+  out <- temp[, .N, by = .(asl,combo)]
+  
+  out <- merge(out, denominatori, by = "asl", all = FALSE)
+  out <- out[N >= min_n]
+  
+  setorder(out, asl, -N, combo)
+  out <- out[, head(.SD, top), by = asl]
+  out[, p := round(100 * N / n_pers, 1)]
+  
+  out[, ord := seq(.N), by = asl]
+  
+}
+
+
+res <- top_combos(temp)
+
+################
+
+# atc_IV_long[, atc:=NULL]
+# 
+# # # create combinations of ATC IV level
+# atc_IV_long[, comb_atc_IV:=paste(atc_IV, collapse = " "), person_id]
+# # 
+# # # order alphabetically to not cosider two sequence with same values but
+# # # different order as different strings
+# atc_IV_long[, comb_ord := vapply(
+#    strsplit(trimws(comb_atc_IV), "\\s+"),
+#    function(x) paste(sort(x, method = "radix"), collapse = " "),
+#    character(1)
+# )]
+# 
+# atc_IV_long <- unique(atc_IV_long, by = c("person_id", "comb_ord"))
+# atc_IV_long[, `:=`(atc_IV=NULL,
+#                     comb_atc_IV=NULL)]
+# # # reduce to persons with combinations of at least 5 different ATC IV level
+# atc_IV_long[, n_comb := lengths(strsplit(trimws(comb_ord), "\\s+"))]
+# atc_IV_long <- atc_IV_long[n_comb>=5 ,]
+
+
+# toadd <- copy(data_new)[, asl := "Tutte"]
+# data_new <- rbind(data_new, toadd)
+# 
+# temp <- merge(atc_IV_long, data_new[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
+
 # create 10 most frequent combinations of at least 5 different ATC IV level
-#res <- temp[, {
+# res <- temp[, {
 #  trans <- as(split(atc_IV, person_id), "transactions")
 #  fi <- eclat(trans,
 #              parameter = list(supp = 0.01, minlen = 5, maxlen = 20),
 #              control   = list(verbose = FALSE))
-#  
+# 
 #  if (length(fi) == 0) NULL else {
 #    top5 <- head(sort(fi, by = "support"), 5)
 #    .(combo = labels(top5),
 #      N     = round(quality(top5)$support * length(trans)),
 #      p  = round(100 * quality(top5)$support, 1))
 #  }
-#}, by = asl]
+# }, by = asl]
 
-res <- temp[, .N, by = .(asl, comb_ord)]
-setorder(res, asl, - N)
-res[, ord := seq(.N), by = asl]
-res <- res[ord <= 10, ]
+# res <- temp[, .N, by = .(asl, comb_ord)]
+# setorder(res, asl, - N)
+# res[, ord := seq(.N), by = asl]
+# res <- res[ord <= 10, ]
 
-setnames(res, "comb_ord", "combo")
-tot_asl <- data_new[, .(tot_pazienti = .N), by = asl]
-res <- merge(res, tot_asl, by = "asl", all.x = TRUE)
-res[, p := round(100 * N / tot_pazienti, 1)]
-res[, tot_pazienti := NULL]
+# setnames(res, "comb_ord", "combo")
+# tot_asl <- data_new[, .(tot_pazienti = .N), by = asl]
+# res <- merge(res, tot_asl, by = "asl", all.x = TRUE)
+# res[, p := round(100 * N / tot_pazienti, 1)]
+# res[, tot_pazienti := NULL]
 
 #res[, combo := gsub(",", " ", gsub("[{}]", "", combo))]
 
 # load drug description
 descr_farmaci <- readRDS(file = paste0(thisdirinput, "/descr_farmaci.rds"))
-atc4 <- unique(descr_farmaci[, .(farmaco_4_atc, farmaco_4_descr)])
+descr_farmaci <- as.data.table(descr_farmaci)
+atc4 <- unique(descr_farmaci[, .(farmaco_4_atc, farmaco_4_descr)], by = "farmaco_4_atc")
 
 # metto in long gli atc delle combinazioni più frequenti
 res[, row_id := .I]
-long <- res[, .(atc = unlist(strsplit(trimws(combo), "\\s+"))), by = row_id]
-long <- unique(long, by = "atc")
+# long <- res[, .(atc = unlist(strsplit(trimws(combo), ",", fixed = TRUE))), by = row_id]
+long <- res[, .(atc = trimws(unlist(strsplit(combo, ",", fixed = TRUE)))), by = row_id]
+long[, pos := seq_len(.N), by = row_id]
+# long <- unique(long, by = "atc")
 long <- merge(long, atc4,
               by.x = "atc", by.y = "farmaco_4_atc",
               all.x = TRUE)
+long[is.na(farmaco_4_descr), farmaco_4_descr := atc]
+setorder(long, row_id, pos)
+
 agg <- long[, .(combo_descr = paste(farmaco_4_descr, collapse = " ")), by = row_id]
 res <- merge(res, agg, by = "row_id", all.x = TRUE)
+setorder(res, row_id)
 res[, row_id := NULL]
 
 
-# # Create D5 with sociodemographic characteristics
+# Create D5 with sociodemographic characteristics
  D5_nocov <- data_new[, .(
                            N          = .N,
                            genere_F_N = sum(genere=="F"),
@@ -180,7 +241,7 @@ for (k in 1:5) {
 # temp <- temp[ord <= 5, ]
 
 
-# # extract 5 most frequent combinations of ATC IV level
+# extract 5 most frequent combinations of ATC IV level
 wide_comb <- dcast(res, 
               asl ~ ord, 
               value.var = c("combo_descr", "N", "p")
