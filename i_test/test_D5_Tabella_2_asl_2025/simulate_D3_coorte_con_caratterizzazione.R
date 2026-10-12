@@ -34,7 +34,22 @@ vocabulary_ATC <- c("A10BK02", "A10BJ01", "A10BX16", "A10BH02", "A10BD24",
                     "C10BK02", "C10BJ01", "C10BX16", "C10BH02", "C10BD24", 
                     "C10BD21", "C10BD19","C10BD13", "C10BD11", "C10BD10", 
                     "C10BD07", "C10BD08","C10BD09","C10CE56", "C10CE54", 
-                    "C10BD16", "C10BD15", "C10BD20", "C10BD23")
+                    "C10BD16", "C10BD15", "C10BD20", "C10BD23",
+                    
+                    "D01BK02", "D02BJ01", "D03BX16", "D04BH02", "D05BD24", 
+                    "D06BD21", "D07BD19","D08BD13", "D09BD11", "D10D10", 
+                    "D11BD07", "D12BD08","D13BD09","D14CE56", "D15CE54", 
+                    "D16BD16", "D17BD15", "D18BD20", "D19BD23",
+                    
+                    "J01BK02", "J02BJ01", "J03BX16", "J04BH02", "J05BD24", 
+                    "J06BD21", "J07BD19","J08BD13", "J09BD11", "J10D10", 
+                    "J11BD07", "J12BD08","J13BD09","J14CE56", "J15CE54", 
+                    "J16BD16", "J17BD15", "J18BD20", "J19BD23",
+                    
+                    "N01BK02", "N02BJ01", "N03BX16", "N04BH02", "N05BD24", 
+                    "N06BD21", "N07BD19","N08BD13", "N09BD11", "N10D10", 
+                    "N11BD07", "N12BD08","N13BD09","N14CE56", "N15CE54", 
+                    "N16BD16", "N17BD15", "N18BD20", "N19BD23")
 
 # set number of persons
 Npersons <- 5000
@@ -59,7 +74,7 @@ data[, genere := ifelse(genere == "1","M","F")]
 data[, fasciaeta := as.character(sample(c("40-64", "65-84", "85+"), Npersons, replace = TRUE))]
 
 # atc_5_almeno_3
-data[, atc_5_almeno_3:=sapply(sample(3:10, .N, replace=T), function(n) paste(sample(vocabulary_ATC, n, replace = T), collapse = " ") )]
+data[, atc_5_almeno_3:=sapply(sample(3:20, .N, replace=T), function(n) paste(sample(vocabulary_ATC, n, replace = T), collapse = " ") )]
 
 # covariates at t0: binary
 covariates_binary <- c("iperpoliterapia", "rsa_adi", "cardiocircolatoria",
