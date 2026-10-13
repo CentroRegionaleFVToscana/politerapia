@@ -13,6 +13,7 @@ if (TEST){
 }else{
   thisdirinput <- dirinput
   thisdiroutput <- dirtemp
+  thisdirexp <- direxp
 }
 
 processing <- fread(file.path(thisdirinput,"descr_farmaci.csv"))
@@ -27,3 +28,4 @@ nameoutput <- "descr_farmaci"
 nameoutputext <- paste0(nameoutput,".rds")
 assign(nameoutput, outputfile)
 saveRDS(outputfile, file = file.path(thisdiroutput, nameoutputext))
+fwrite(outputfile, file = file.path(thisdirexp, paste0(nameoutput,".csv")))
