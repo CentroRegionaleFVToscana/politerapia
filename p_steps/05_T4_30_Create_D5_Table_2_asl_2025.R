@@ -75,7 +75,7 @@ top_combos <- function(dt, k, top = 10, min_supp) {
   if (nrow(dt) == 0L) return(NULL)
   
   setorder(dt, person_id, atc_IV)                 
-  cmb <- dt[, .(combo = combn(atc_IV, k, paste, collapse = ",")), by = .(person_id, asl)]
+  cmb <- dt[, .(combo = as.vector(combn(atc_IV, k, paste, collapse = ","))), by = .(person_id, asl)]
   
   temp <- merge(cmb, data[,.(person_id, asl)], by = c("person_id", "asl"), all = F, allow.cartesian = T)
   
