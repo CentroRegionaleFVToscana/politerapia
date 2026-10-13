@@ -74,7 +74,7 @@ row_header_1 <- c()
 j            <- -1
 
 # row 1
-row_header_1 <- c(row_header_1, "Soggetti con un farmaco tra il 2023 e il 2025 e in anagrafe almeno un giorno tra il 2023 e il 2025 (istanza)")
+row_header_1 <- c(row_header_1, "Soggetti con un farmaco tra il 2023 e il 2025, in anagrafe almeno un giorno tra il 2023 e il 2025 e con almeno 40 anni (istanza)")
 j <- j + 1
 tab_nice[, cell := as.character(N)]
 setnames(tab_nice, "cell", paste0("cell_", j))

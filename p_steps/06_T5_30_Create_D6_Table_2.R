@@ -133,7 +133,7 @@ for (k in asl) {
   
   # row 8
   row_header_1 <- c(row_header_1, "4")
-  j <- descriptive_N_perc_variante(j, "combinazione_piu_utilizzata_4_")
+  j <- descriptive_N_perc_variante(j, "combinazione_5_piu_utilizzata_4_")
   
   # row 9
   row_header_1 <- c(row_header_1, "5")
