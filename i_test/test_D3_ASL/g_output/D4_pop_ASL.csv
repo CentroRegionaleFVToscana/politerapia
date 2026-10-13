@@ -1,0 +1,5 @@
+person_id,start_d,end_d,valore,misura,birth_date,ASL
+P01,2013-01-01,2026-03-03,1,ASL,,CE
+P02,2023-03-04,2025-12-31,3,ASL,,SE
+P03,2014-01-01,2025-02-20,1,ASL,,CE
+P03,2025-02-21,2025-12-31,2,ASL,,NO

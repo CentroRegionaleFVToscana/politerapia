@@ -56,4 +56,6 @@ processing <- processing[, ..tokeep]
 nameoutputfile <- paste0("D4_pop_ASL.rds")
 
 saveRDS(processing, file = file.path(thisdiroutput, nameoutputfile))
+nameoutputfile <- paste0("D4_pop_ASL.xlsx")
+write_xlsx(processing, file.path(thisdiroutput, nameoutputfile))
 
