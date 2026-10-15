@@ -39,7 +39,7 @@ atc_IV_long <- unique(atc_IV_long, by = c("person_id", "atc_IV"))
 toadd <- copy(data)[, asl := "Tutte"]
 data <- rbind(data, toadd)
 
-temp <- merge(atc_IV_long, data[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
+
 
 # extract most frequent combinations
 top_combos <- function(dt, k = 5, top = 5, min_supp = 0.01) {
@@ -86,29 +86,10 @@ top_combos <- function(dt, k = 5, top = 5, min_supp = 0.01) {
 }
 
 
-res <- top_combos(temp)
-
 # load drug description
 descr_farmaci <- readRDS(file = paste0(thisdirinput, "/descr_farmaci.rds"))
 descr_farmaci <- as.data.table(descr_farmaci)
 atc4 <- unique(descr_farmaci[, .(farmaco_4_atc, farmaco_4_descr)], by = "farmaco_4_atc")
-
-
-# metto in long gli atc delle combinazioni più frequenti
-res[, row_id := .I]
-long <- res[, .(atc = trimws(unlist(strsplit(combo, ",", fixed = TRUE)))), by = row_id]
-long[, pos := seq_len(.N), by = row_id]
-# long <- unique(long, by = "atc")
-long <- merge(long, atc4,
-              by.x = "atc", by.y = "farmaco_4_atc",
-              all.x = TRUE)
-long[is.na(farmaco_4_descr), farmaco_4_descr := atc]
-setorder(long, row_id, pos)
-
-agg <- long[, .(combo_descr = paste(farmaco_4_descr, collapse = " ")), by = row_id]
-res <- merge(res, agg, by = "row_id", all.x = TRUE)
-setorder(res, row_id)
-res[, row_id := NULL]
 
 
 for (j in esenzioni) {
@@ -164,8 +145,6 @@ for (j in esenzioni) {
   temp <- temp[ord <= 5, ]
   
   # aggancio la descrizione del farmaco
-  descr_farmaci <- readRDS(file = paste0(thisdirinput, "/descr_farmaci.rds"))
-  
   temp <- merge(temp, descr_farmaci, by.x = "atc", by.y = "farmaco_5_atc", all.x = T)
   
   
@@ -187,12 +166,30 @@ for (j in esenzioni) {
   }
   
   # extract 5 most frequent combinations of ATC IV level
- 
+  temp <- merge(atc_IV_long, data_new[,.(person_id, asl)], by = "person_id", all = F, allow.cartesian = T)
   
   # temp <- temp[, .N, by = c("comb_ord","asl")]
   # setorder(temp, asl, - N)
   # temp[, ord := seq(.N), by = asl]
   # temp <- temp[ord <= 5, ]
+  
+  res <- top_combos(temp)
+  
+  # metto in long gli atc delle combinazioni più frequenti
+  res[, row_id := .I]
+  long <- res[, .(atc = trimws(unlist(strsplit(combo, ",", fixed = TRUE)))), by = row_id]
+  long[, pos := seq_len(.N), by = row_id]
+  # long <- unique(long, by = "atc")
+  long <- merge(long, atc4,
+                by.x = "atc", by.y = "farmaco_4_atc",
+                all.x = TRUE)
+  long[is.na(farmaco_4_descr), farmaco_4_descr := atc]
+  setorder(long, row_id, pos)
+  
+  agg <- long[, .(combo_descr = paste(farmaco_4_descr, collapse = " ")), by = row_id]
+  res <- merge(res, agg, by = "row_id", all.x = TRUE)
+  setorder(res, row_id)
+  res[, row_id := NULL]
   
   wide <- dcast(res, 
                 asl ~ ord, 
